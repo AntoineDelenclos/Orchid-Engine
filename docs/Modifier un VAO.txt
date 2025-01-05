@@ -1,0 +1,3 @@
+https://community.khronos.org/t/adding-new-vertex-data-to-a-vao/77133/4
+
+En fait il faudrait peut etre mieux modifier le VBO : https://stackoverflow.com/questions/64954174/opengl-update-vbo-vertices-buffersubdata

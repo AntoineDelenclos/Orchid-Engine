@@ -1,0 +1,25 @@
+vec3 spotlight_calcul(Spotlight light, vec3 normal, vec3 view){
+	vec3 lightDir = normalize(light.position - crntPos);
+	vec3 spotDir = normalize(-light.direction);
+	float theta = dot(lightDir, spotDir);
+	float epsilon = light.innerCutOff - light.outerCutOff;
+	float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0) //clamp permet d'encadrer l'expression
+	if (theta > light.outerCutOff){ //Si le frag est dans l'angle du spotlight, ici > car on resonne en cosinus
+		vec3 ambientVec = light.ambientIntensity * material.ambient * light.color;
+
+		float diffuse = max(dot(normal, lightDir), 0.0);
+		vec3 diffuseVec = light.diffuseStrength * diffuse * vec3(texture(material.diffuseTexture,TexCoord)) * light.color;
+
+		vec3 reflectDir = reflect(-lightDir, normal);
+		float spec = pow(max(dot(view, reflectDir), 0.0), material.shininess * 128);
+		vec3 specularVec = light.specularStrength * spec * vec3(texture(material.specularTexture, TexCoord)) * light.color;
+
+		diffuseVec *= intensity;
+		specularVec *= intensity;
+
+		return (ambientVec + diffuseVec + specularVec);
+	}
+	else{
+		return (light.ambientIntensity * vec3(texture(material.specularTexture, TexCoord)) * light.color);
+	}
+}

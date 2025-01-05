@@ -1,0 +1,10 @@
+https://github.com/ocornut/imgui/wiki/Multi-Viewports
+https://nehe.gamedev.net/tutorial/multiple_viewports/20002/
+
+
+https://gamedev.stackexchange.com/questions/181313/how-to-render-in-a-imgui-window
+
+https://gamedev.stackexchange.com/questions/150214/render-in-a-imgui-window
+
+
+https://gamedev.stackexchange.com/questions/140693/how-can-i-render-an-opengl-scene-into-an-imgui-window?rq=1

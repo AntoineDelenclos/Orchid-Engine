@@ -1,0 +1,33 @@
+On va avoir besoin de faire des scripts dans le moteur.
+
+Les types de scripts impératifs : 
+
+-Script changement d'état (ON/OFF)
+-Script changement de position.
+-Script changement de couleur,etc.
+
+=> Tout cela peut être regroupé dans un système global de script de changemennt de paramètre(s)
+
+Il faut faire un système qui soit vraiment adaptable à toutes les entités actuelles, futures et avec leurs modifications possibles.
+
+
+
+BUT FONCTIONNEL D'UN TEL SYSTEME :
+
+-Pouvoir cliquer sur une entité et créer un script associé à celle-ci
+-Pouvoir créer des scripts qui affectent plusieurs entités entre elles.
+-Modifier des scripts.
+-Transcrire les scripts de sorte à pouvoir les charger dans un fichier script. (ou map mais peut-être plus simple de faire les scripts indépendamment).
+
+
+Comment faire en sorte que le script soit toujours fonctionnel ?
+
+Si on a un fichier texte à remplir avec une syntaxe propre ça risque peut-être d'être trop compliqué.
+
+On peut penser à une interface de script. Quand on lance le créateur de script ça lance une nouvelle fenêtre
+
+Dans cette fenêtre on a la liste des entités à gauche, et l'ensemble des options (types de script, types de lien) dans un autre panel. Le principal de la fenêtre est un fond gris pour faire des blueprint.
+
+
+-Différencier les game script (valable par exemple sur toutes les maps du jeu), des scripts de map (par exemple la porte A s'ouvre)
+

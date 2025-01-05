@@ -1,0 +1,8 @@
+https://pthom.github.io/imgui_manual_online/manual/imgui_manual.html
+
+https://github.com/ocornut/imgui/wiki/Image-Loading-and-Displaying-Examples#rendering-your-game-scene-into-a-texture
+
+Et surtout https://github.com/ocornut/imgui/wiki/
+
+
+https://uysalaltas.github.io/2022/01/09/OpenGL_Imgui.html

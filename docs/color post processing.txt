@@ -1,0 +1,5 @@
+color de base = (texture(ourTexture1, TexCoord) * texture(ourTexture2, TexCoord)
+
+formule = (contrast, contrast, contrast, contrast) * ((texture(ourTexture1, TexCoord) * texture(ourTexture2, TexCoord) - (0.5f, 0.5f, 0.5f, 0.5f)) + (0.5f, 0.5, 0.5f, 0.5) + (brightness,brightness,brightness,brightness);
+
+color^gamma <=> color * 

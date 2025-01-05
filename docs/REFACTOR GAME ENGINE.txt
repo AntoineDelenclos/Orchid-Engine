@@ -1,0 +1,17 @@
+_Classe CEntity
+.Une entité est d'un certain type (light, camera, polyhèdre, etc.). Quels sont les choses communes à chaque entité ?
+Position, texture (même pour les lumières et caméras car il faut bien les voir lorsqu'on est sur le moteur), taille (si on scale), un set de vertices (qu'il faudra ensuite ajouter au VAO)
+Peut-être également un set de shaders spécifiques à chaque type d'entité ?
+
+PENSEZ A RAJOUTER DES EXCEPTIONS POUR TOUT LE PLUS RAPIDEMENT POSSIBLE AU MOINS C'EST FAIT !!!!!
+
+/////////////////////////////////////////////////////////////
+
+_CTextures
+Stocker les path et gluint le numéro texture
+_CGeometry
+
+
+Dans CEngine on inclut CTexture
+CTexture.h n'inclut pas CEngine.h mais les autres librairies
+Alors dans CTexture.h on a la méthode TEXBinding();

@@ -1,0 +1,3 @@
+https://learn.microsoft.com/en-us/visualstudio/version-control/git-manage-repository?view=vs-2022
+
+Pour merge une branch vers une autre : on checkout la branche qu'on veut en destination en double cliquant puis on clique droit sur la branche source et on fait merge source into destination

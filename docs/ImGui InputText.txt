@@ -1,0 +1,22 @@
+/*if (engine.inpENGInputs.bINPBackspaceInputTextInterface) {
+    ImGuiID id = ImGui::GetID("Name");
+    ImGuiInputTextState* state = ImGui::GetInputTextState(id);
+    if (&state) {
+        state->SelectAll();
+        state->ClearSelection();
+    }
+    std::cout << state->Stb.cursor << std::endl; //Va avoir la position du curseur
+}*/
+//Au dessus en commentaire : version la plus avancée
+
+//ImGuiID idInputText = ImGui::GetActiveID();
+//ImGui::GetIO().AddKeyEvent(ImGuiKey_Backspace, true);
+// Check if the backspace key is pressed
+/*if(ImGui::GetIO().KeysDown[ImGuiKey_Backspace]) {
+    // Remove the last character
+    if (ImGui::GetInputTextState(idInputText).c) {
+        ImGui::SetInputText(idInputText, ImGui::GetInputText(idInputText).substr(0, ImGui::GetInputText(idInputText).length() - 1));
+    }
+}*/
+//std::cout << ImGui::GetInputTextState(idInputText) << std::endl;
+//ImGui::InputText("Name", &engine.pcubENGCubeEntitiesList[siEGISelectedEntity_cube].strENTName, ImGuiInputTextFlags_CallbackCompletion);

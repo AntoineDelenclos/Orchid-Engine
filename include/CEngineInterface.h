@@ -1,0 +1,100 @@
+#pragma once
+#include "CRender.h"
+#include "CCamera.h"
+//Use to convert wstring -> string
+#include <locale>
+#include <codecvt>
+#define SIZE_TEXTURE_INTERFACE 100 //Taille de chaque texture dans les modules
+#define ACTIVE_COLOR "#00FF00" //Couleur dans l'interface qui va montrer si une entité est activée ou non
+#define UNACTIVE_COLOR "#FF0000"
+//class CTexture;
+
+class CEngineInterface {
+public:
+	bool bEGIFullscreen;
+	bool bEGIWireframeChecked;
+	bool bEGIFPSPlotChecked;
+	bool bEGIScriptEditorON;
+
+	int iEGIFpsLimiter;
+	int iEGIWidth;
+	int iEGIHeight;
+	GLfloat gfEGIBrightness;
+	GLfloat gfEGIContrast;
+	GLfloat gfEGISaturation;
+	GLfloat gfEGIGamma;
+	bool bEGINormeRec_709;
+
+	int iEGINombreTexturesParLigne;
+	int piEGITexturePanelSize[2];
+
+	//New entity variables
+	GLfloat* pgfEGINewEntityXYZPos;
+	unsigned int uiEGINewEntityGlobalID;
+	unsigned int uiEGINewEntityTypeID;
+	GLfloat gfEGINewEntityScaleRatio;
+	int iEGITextureNumber;
+	//New entity material values
+	glm::vec3 vec3EGINewEntityAmbient;
+	glm::vec3 vec3EGINewEntityDiffuse;
+	glm::vec3 vec3EGINewEntitySpecular;
+	float fEGINewEntityShininess;
+	float fEGINewEntityTransparency;
+
+	//Select entity in the lists
+	int siEGISelectedEntity_cube;
+	int siEGISelectedEntity_dir_light;
+	int siEGISelectedEntity_point_light;
+	int siEGISelectedEntity_spot_light;
+	int siEGISelectedType; //Default -1 ; 0 pour cube, 1 pour directional, etc. Permet de faire en sorte qu'après sélection
+	//de différentes entités de types différents, seule la dernière entité sélectionnée ait ses attributs de modifiable
+	std::string strEGISelectedName;
+	char testNameInput;
+
+	CRender rdrEGIRender;
+	//New light variables
+	GLfloat pgfEGINewLightColor[3];
+	GLfloat gfEGINewLightDirectionX; GLfloat gfEGINewLightDirectionY; GLfloat gfEGINewLightDirectionZ;
+	GLfloat gfEGINewLightAmbientIntensity; GLfloat gfEGINewLightDiffuseStrength; GLfloat gfEGINewLightSpecularStrength;
+	float fEGINewLightKC; float fEGINewLightKL; float fEGINewLightKQ;
+	float fEGINewLightInnerCutOff; float fEGINewLightOuterCutOff;
+
+	//Entity modifications via interface
+	float fEGINewX, fEGINewY, fEGINewZ;
+	GLfloat gfEGINewRatio; //Scaling ratio
+	GLfloat gfEGINewCubeLength, gfEGINewCubeHeight, gfEGINewCubeDepth; //Cube geometry properties ratio
+	float fEGINewDirectionX, fEGINewDirectionY, fEGINewDirectionZ;
+	float fEGINewKC, fEGINewKL, fEGINewKQ;
+
+
+	CEngineInterface(CEngine &engine);
+	~CEngineInterface();
+	bool bEGIIsDisplayed();
+	void EGIChangeDisplayState();
+
+	//IMGUI MODULES
+
+	void EGIEngineModule(CEngine& engine);
+	void EGIPostProcessingModule(CEngine& engine);
+	void EGIInputsModule(CEngine& engine);
+	void EGITexturesModule(CEngine& engine);
+	void EGIEntitiesListsModule(CEngine &engine);
+	void EGINewEntityModule(CEngine& engine);
+	void EGISelectedEntityModule(CEngine& engine);
+	void EGICameraModule(CEngine& engine, CCamera& camera);
+	void EGIScriptEditorModule(CEngine& engine);
+	void EGIDockingEngine(CEngine& engine);
+	void EGIDockingScriptEditor(CEngine& engine);
+
+	void EGIFramebufferModule(CEngine& engine, GLuint texture);
+	void EGIMenuBar(CEngine& engine);
+	std::string openfiledialog(char* filter, HWND owner);
+
+	void EGIWireframeUpdate();
+	void EGIFullscreenUpdate(CEngine &engine);
+	void EGIPreUpdate(CEngine& engine);
+	void EGIUpdate(CEngine &engine);
+	void EGIPostUpdate(CEngine& engine);
+
+	void EGIInterfaceToEngine(CEngine &engine);
+};
