@@ -61,6 +61,7 @@ target_compile_definitions(Orchid PRIVATE GLEW_STATIC) #Linking GLEW in static w
 #This will link the assimp .dll during the build of the executable
 add_custom_command(TARGET Orchid POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy
-        "${CMAKE_CURRENT_SOURCE_DIR}/libs/ASSIMP/assimp-5.3.1/build/bin/Release/assimp-vc143-mt.dll"
+        #Depending if it's x64-Debug or x64-Release, it builds with the corresponding .dll
+        "$<IF:$<CONFIG:Debug>,${CMAKE_CURRENT_SOURCE_DIR}/libs/ASSIMP/assimp-5.3.1/build/bin/Debug/assimp-vc143-mtd.dll,${CMAKE_CURRENT_SOURCE_DIR}/libs/ASSIMP/assimp-5.3.1/build/bin/Release/assimp-vc143-mt.dll>"
         "$<TARGET_FILE_DIR:Orchid>"
 )
