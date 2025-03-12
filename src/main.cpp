@@ -85,27 +85,27 @@ int main() {
     testCube_1.CUBFirstTimeSetVerticesPosition();
     testCube_1.CUBScaleEntitySize(1.f);
     render.RDRCreateMandatoryForCube(engine, testCube_1, testCube_1.uiCUBId); //Ici le numero correspond au numero de l'entité et donc de la paire (VAO,VBO)
-    engine.ENGAddCubeEntity(testCube_1);
+    //engine.ENGAddCubeEntity(testCube_1);
 
     CCube testCube_2 = CCube(engine.uiENGGetNextFreeGlobalID(), engine.uiENGGetNextFreeEntityID(cube) , Position_test_1, "../../../data/shaders/core.vert", "../../../data/shaders/core.frag", 1); //Le dernier numéro correspond aux textures bind dans le moteur
     testCube_2.CUBFirstTimeSetVerticesPosition();
     testCube_2.CUBScaleEntitySize(2.f);
     render.RDRCreateMandatoryForCube(engine, testCube_2, testCube_2.uiCUBId);
-    engine.ENGAddCubeEntity(testCube_2);
+    //engine.ENGAddCubeEntity(testCube_2);
 
     GLfloat ENTITYlightColorFloat_1[3] = { 1.f,0.f,1.f };
 
     CLight testLight_1 = CLight(directional, engine.uiENGGetNextFreeGlobalID(), engine.uiENGGetNextFreeEntityID(dir_light), pos_cube_light, glm::vec3(1.f, 1.f, 1.f), ENTITYlightColorFloat_1, ambientIntensity, diffuseStrength, specularStrength, "../../../data/shaders/light.vert", "../../../data/shaders/light.frag", 3);
     testLight_1.LIGFirstTimeSetVerticesPosition();
     render.RDRCreateMandatoryForLight(engine, testLight_1, testLight_1.uiLIGId);
-    engine.ENGAddLightEntity(testLight_1);
+    //engine.ENGAddLightEntity(testLight_1);
     
     GLfloat colorlight2[3] = {0.f, 0.5f, 0.f};
 
     CLight testLight_2 = CLight(directional, engine.uiENGGetNextFreeGlobalID(), engine.uiENGGetNextFreeEntityID(dir_light), Position_test_2, glm::vec3(1.f, 1.f, 1.f), colorlight2, ambientIntensity, diffuseStrength, specularStrength, "../../../data/shaders/light.vert", "../../../data/shaders/light.frag", 3);
     testLight_2.LIGFirstTimeSetVerticesPosition();
     render.RDRCreateMandatoryForLight(engine, testLight_2, testLight_2.uiLIGId);
-    engine.ENGAddLightEntity(testLight_2);
+    //engine.ENGAddLightEntity(testLight_2);
 
     glm::vec3 Position_test_3 = glm::vec3(2.f, 2.f, 2.f);
     GLfloat colorlight3[3] = { 1.f, 1.f, 1.f };
@@ -113,7 +113,7 @@ int main() {
     CLight testLight_3 = CLight(point, engine.uiENGGetNextFreeGlobalID(), engine.uiENGGetNextFreeEntityID(point_light), Position_test_3, colorlight3, 1.0f, 0.09f, 0.032f, ambientIntensity, diffuseStrength, specularStrength, "../../../data/shaders/light.vert", "../../../data/shaders/light.frag", 3);
     testLight_3.LIGFirstTimeSetVerticesPosition();
     render.RDRCreateMandatoryForLight(engine, testLight_3, testLight_3.uiLIGId);
-    engine.ENGAddLightEntity(testLight_3);
+    //engine.ENGAddLightEntity(testLight_3);
 
     glm::vec3 Position_test_4 = glm::vec3(1.f, 3.f, 2.f);
     GLfloat colorlight4[3] = { 0.4f, 1.f, 0.2f };
@@ -121,14 +121,14 @@ int main() {
     CLight testLight_4 = CLight(spot, engine.uiENGGetNextFreeGlobalID(), engine.uiENGGetNextFreeEntityID(spot_light), Position_test_4, glm::vec3(1.f, 1.f, 1.f), 0.91f, 0.82f, colorlight4, ambientIntensity, diffuseStrength, specularStrength, "../../../data/shaders/light.vert", "../../../data/shaders/light.frag", 3);
     testLight_4.LIGFirstTimeSetVerticesPosition();
     render.RDRCreateMandatoryForLight(engine, testLight_4, testLight_4.uiLIGId);
-    engine.ENGAddLightEntity(testLight_4);
+    //engine.ENGAddLightEntity(testLight_4);
 
     glm::vec3 Position_test_5 = glm::vec3(2.f, 1.f, 0.f);
 
     CLight testLight_5 = CLight(directional, engine.uiENGGetNextFreeGlobalID(), engine.uiENGGetNextFreeEntityID(dir_light), Position_test_5, glm::vec3(1.f, 1.f, 1.f), colorlight2, ambientIntensity, diffuseStrength, specularStrength, "../../../data/shaders/light.vert", "../../../data/shaders/light.frag", 3);
     testLight_5.LIGFirstTimeSetVerticesPosition();
     render.RDRCreateMandatoryForLight(engine, testLight_5, testLight_5.uiLIGId);
-    engine.ENGAddLightEntity(testLight_5);
+    //engine.ENGAddLightEntity(testLight_5);
 
     //for (int test_performance = 0; test_performance<100; test_performance++) {
     //    CCube testCube = CCube(engine.uiENGGetNextFreeGlobalID(), engine.uiENGGetNextFreeEntityID(cube), glm::vec3(test_performance * 0.2f,test_performance*0.2f, test_performance * 0.2f), "INTERNAL/Shaders/core.vert", "INTERNAL/Shaders/core.frag", 0);

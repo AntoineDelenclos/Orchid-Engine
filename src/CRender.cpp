@@ -8,6 +8,7 @@ CRender::~CRender() {
 }
 
 void CRender::RDRCreateMandatoryForCube(CEngine& engine, CCube& cube_entity, int number) {
+	std::cout << "Debug cube pgfCUBVertices : " << *cube_entity.pgfCUBVertices << std::endl;
 	glGenVertexArrays(1, &engine.puiENGVAOCubesEngine[number]);
 	glGenBuffers(1, &engine.puiENGVBOCubesEngine[number]);
 	glBindVertexArray(engine.puiENGVAOCubesEngine[number]);
@@ -24,9 +25,16 @@ void CRender::RDRCreateMandatoryForCube(CEngine& engine, CCube& cube_entity, int
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(5 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(2);
 	glBindVertexArray(0); //Unbind VAO
+
+	engine.ENGAddCubeEntity(cube_entity);
+
+	delete[] cube_entity.pgfCUBVertices;
+	cube_entity.pgfCUBVertices = nullptr;
 }
 
 void CRender::RDRCreateMandatoryForLight(CEngine& engine, CLight& light_entity, int number) {
+	std::cout << "Debug cube pgfCUBVertices : " << *light_entity.pgfLIGVertices << std::endl;
+
 	switch (light_entity.enumLIGType) {
 	case(directional):
 		glGenVertexArrays(1, &engine.puiENGVAODirectionalLightsEngine[number]);
@@ -54,6 +62,11 @@ void CRender::RDRCreateMandatoryForLight(CEngine& engine, CLight& light_entity, 
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(1);
 	glBindVertexArray(0); //Unbind VAO
+
+	engine.ENGAddLightEntity(light_entity);
+
+	delete[] light_entity.pgfLIGVertices;
+	light_entity.pgfLIGVertices = nullptr;
 }
 
 void CRender::RDRCubeVerticesAndTextureRendering(CEngine &engine, CCube &cube_entity, int number) {

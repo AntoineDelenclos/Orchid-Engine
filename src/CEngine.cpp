@@ -6,8 +6,11 @@
 
 //Default constructor
 CEngine::CEngine() {
+	std::cout << "avant initialisation" << std::endl;
 	glfwInit();
+	std::cout << "apres initialisation" << std::endl;
 	if (!glfwInit()) {
+		std::cout << "erreur initialisation" << std::endl;
 		CException exception(GLFW_INIT_ERREUR);
 		throw(exception);
 	}
@@ -198,6 +201,7 @@ void CEngine::ENGStart() {
 	//Utilisation d'OpenGL 3.3 pour avoir les nouveautés:
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, 1); //Va permettre d'accéder au Debug Context (version 4.3+)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //Permet d'utiliser le GPU et les vertex (nouveautés OpenGL)
 	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); //Obligatoire pour macOS
 	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE); //Fenêtre redimensionnable ou non
