@@ -5,9 +5,9 @@
 #include <string>
 #include <vector>
 //GLM
-#include <glm.hpp>
-#include <gtc/matrix_transform.hpp>
-#include <gtc/type_ptr.hpp>
+#include "../libs/GLM/glm-0.9.9.8/glm/glm/glm.hpp"
+#include "../libs/GLM/glm-0.9.9.8/glm/glm/gtc/matrix_transform.hpp"
+#include "../libs/GLM/glm-0.9.9.8/glm/glm/gtc/type_ptr.hpp"
 #include <algorithm>
 #include "CException.h"
 

@@ -4,6 +4,7 @@
 //Use to convert wstring -> string
 #include <locale>
 #include <codecvt>
+#include <windows.h>
 #define SIZE_TEXTURE_INTERFACE 100 //Taille de chaque texture dans les modules
 #define ACTIVE_COLOR "#00FF00" //Couleur dans l'interface qui va montrer si une entité est activée ou non
 #define UNACTIVE_COLOR "#FF0000"

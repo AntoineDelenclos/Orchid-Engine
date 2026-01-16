@@ -1,7 +1,7 @@
 //GLM
-#include <glm.hpp>
-#include <gtc/matrix_transform.hpp>
-#include <gtc/type_ptr.hpp>
+// #include "../libs/GLM/glm-0.9.9.8/glm/glm/glm.hpp"
+// #include "../libs/GLM/glm-0.9.9.8/glm/glm/gtc/matrix_transform.hpp"
+// #include "../libs/GLM/glm-0.9.9.8/glm/glm/gtc/type_ptr.hpp"
 
 #include "../include/CPostProcessing.h"
 #include "../include/CLogs.h"
@@ -11,6 +11,7 @@
 #include "../include/CEngineInterface.h"
 #include "../include/CRender.h"
 #include "../include/entities/CModel.h"
+#include "../libs/IMGUI/imgui-docking/backends/imgui_impl_glfw.h"
 
 CEngine engine = CEngine();
 
@@ -64,9 +65,9 @@ int main() {
     glm::mat4 model = glm::mat4(1.0f);
     glm::mat4 view = glm::mat4(1.0f);
     
-    glm::mat4 movement = glm::mat4(1.0f); //Permet de définir les movements de caméra (mais donc bizarre car on pourrait travailler directement sur view ?)
+    glm::mat4 movement = glm::mat4(1.0f); //Permet de dÃ©finir les movements de camÃ©ra (mais donc bizarre car on pourrait travailler directement sur view ?)
     
-    //fov : 45°, aspect ratio, near clipping plane, far clipping plane
+    //fov : 45Â°, aspect ratio, near clipping plane, far clipping plane
     projection = glm::perspective(90.0f, (GLfloat)engine.iENGScreenWidth/(GLfloat)engine.iENGScreenHeight, 0.1f, 1000.0f);
     //projection = glm::ortho(0.0f, (GLfloat)screenWidth, 0.0f, (GLfloat)screenHeight, 0.1f, 1000.0f);
     float rotation = 0.0f;
@@ -84,10 +85,10 @@ int main() {
     CCube testCube_1 = CCube(engine.uiENGGetNextFreeGlobalID(), engine.uiENGGetNextFreeEntityID(cube), Position_nulle, "../../../data/shaders/core.vert", "../../../data/shaders/core.frag", 2);
     testCube_1.CUBFirstTimeSetVerticesPosition();
     testCube_1.CUBScaleEntitySize(1.f);
-    render.RDRCreateMandatoryForCube(engine, testCube_1, testCube_1.uiCUBId); //Ici le numero correspond au numero de l'entité et donc de la paire (VAO,VBO)
+    render.RDRCreateMandatoryForCube(engine, testCube_1, testCube_1.uiCUBId); //Ici le numero correspond au numero de l'entitÃ© et donc de la paire (VAO,VBO)
     //engine.ENGAddCubeEntity(testCube_1);
 
-    CCube testCube_2 = CCube(engine.uiENGGetNextFreeGlobalID(), engine.uiENGGetNextFreeEntityID(cube) , Position_test_1, "../../../data/shaders/core.vert", "../../../data/shaders/core.frag", 1); //Le dernier numéro correspond aux textures bind dans le moteur
+    CCube testCube_2 = CCube(engine.uiENGGetNextFreeGlobalID(), engine.uiENGGetNextFreeEntityID(cube) , Position_test_1, "../../../data/shaders/core.vert", "../../../data/shaders/core.frag", 1); //Le dernier numÃ©ro correspond aux textures bind dans le moteur
     testCube_2.CUBFirstTimeSetVerticesPosition();
     testCube_2.CUBScaleEntitySize(2.f);
     render.RDRCreateMandatoryForCube(engine, testCube_2, testCube_2.uiCUBId);
@@ -134,7 +135,7 @@ int main() {
     //    CCube testCube = CCube(engine.uiENGGetNextFreeGlobalID(), engine.uiENGGetNextFreeEntityID(cube), glm::vec3(test_performance * 0.2f,test_performance*0.2f, test_performance * 0.2f), "INTERNAL/Shaders/core.vert", "INTERNAL/Shaders/core.frag", 0);
     //    testCube.CUBFirstTimeSetVerticesPosition();
     //    testCube.CUBScaleEntitySize(1.f);
-    //    render.RDRCreateMandatoryForCube(engine, testCube, testCube.uiCUBId); //Ici le numero correspond au numero de l'entité et donc de la paire (VAO,VBO)
+    //    render.RDRCreateMandatoryForCube(engine, testCube, testCube.uiCUBId); //Ici le numero correspond au numero de l'entitÃ© et donc de la paire (VAO,VBO)
     //    engine.ENGAddCubeEntity(testCube);
     //}
 
@@ -195,7 +196,7 @@ int main() {
     CModel modelBackpack = CModel("../../../data/assets/models/abc/untitled.obj");
 
     while (!glfwWindowShouldClose(engine.pwindowENGWindow)) { //Loop until the user closes the window
-        //glViewport(0, 0, engine.iENGScreenWidth, engine.iENGScreenHeight); //Redimensionne relativement à la taille d'écran
+        //glViewport(0, 0, engine.iENGScreenWidth, engine.iENGScreenHeight); //Redimensionne relativement Ã  la taille d'Ã©cran
         
         //////////////////////TEST FRAMEBUFFER///////////////////
         glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
@@ -222,14 +223,14 @@ int main() {
 
         engine.inpENGInputs.processInputs(engine.pwindowENGWindow);
         glfwSetKeyCallback(engine.pwindowENGWindow, key_callback);
-        //Pour activer/désactiver la souris
+        //Pour activer/dÃ©sactiver la souris
         if (engine.inpENGInputs.iINPCameraState == 0) {
             glfwSetInputMode(engine.pwindowENGWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-            engine.inpENGInputs.bINPFirstMouse = true; //Empêche le calcul du décalage entre la position de la souris à la fin du mode déplacement
-            //de vue et entre le début de la prochaine fois où on entre dans ce mode.
+            engine.inpENGInputs.bINPFirstMouse = true; //EmpÃªche le calcul du dÃ©calage entre la position de la souris Ã  la fin du mode dÃ©placement
+            //de vue et entre le dÃ©but de la prochaine fois oÃ¹ on entre dans ce mode.
             glfwSetCursorPosCallback(engine.pwindowENGWindow, ImGui_ImplGlfw_CursorPosCallback); //MDR Il suffisait de call le callback d'imgui
             glfwSetScrollCallback(engine.pwindowENGWindow, ImGui_ImplGlfw_ScrollCallback);
-            //ImGui_ImplGlfw_RestoreCallbacks(engine.pwindowENGWindow); // Crée un crash abort()
+            //ImGui_ImplGlfw_RestoreCallbacks(engine.pwindowENGWindow); // CrÃ©e un crash abort()
             // Lien erreur similaire avec d'autres callback de glfw et imgui https://github.com/ocornut/imgui/issues/5708 
             // https://github.com/ocornut/imgui/issues/1759#issue-316130528
             // https://github.com/ocornut/imgui/issues/4981
@@ -284,7 +285,7 @@ int main() {
 
         render.RDRPostProcess(engine);
 
-        //On reset le framebuffer après chaque frame.
+        //On reset le framebuffer aprÃ¨s chaque frame.
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glDisable(GL_DEPTH_TEST);
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -295,7 +296,7 @@ int main() {
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         //render.RDRPostProcess(engine);
 
-        engineInterface.EGIFramebufferModule(engine, 8); //Il faut penser à mettre le framebuffer en numéro 0
+        engineInterface.EGIFramebufferModule(engine, 8); //Il faut penser Ã  mettre le framebuffer en numÃ©ro 0
         engineInterface.EGIPostUpdate(engine);
 
         /*glViewport(100, 50, engine.iENGScreenWidth, engine.iENGScreenHeight);
@@ -321,7 +322,7 @@ int main() {
         render.RDRRenderingLightCubes(engine);
         engine.ENGPreUpdateInputsValues();
 
-        glBindFramebuffer(GL_FRAMEBUFFER, 0); //On va debind le framebuffer puis le rebind au début de chaque frame*/
+        glBindFramebuffer(GL_FRAMEBUFFER, 0); //On va debind le framebuffer puis le rebind au dÃ©but de chaque frame*/
         //glDeleteFramebuffers(1, &fbo);
         //glDeleteTextures(1, &TOF);
         
@@ -357,7 +358,7 @@ int main() {
         glfwSwapBuffers(engine.pwindowENGWindow); //Swap front and back buffers
         engine.ENGFrameUpdate(); //Contains glfwPollEvents()
 
-        //Penser à bien mettre cette fonction dans CEngine car sinon le moteur ne va pas se limiter à un certain nombre de FPS
+        //Penser Ã  bien mettre cette fonction dans CEngine car sinon le moteur ne va pas se limiter Ã  un certain nombre de FPS
         if ( (1000.0 / engine.iENGGetFpsLimit()) > (1000*engine.dENGDiffTime) ){
             std::this_thread::sleep_for(std::chrono::milliseconds((1000 / engine.iENGGetFpsLimit()) - (unsigned int)(1000 * engine.dENGDiffTime)));
         }
@@ -365,7 +366,7 @@ int main() {
     }
 
     //render.~CRender();
-    //engineInterface.~CEngineInterface(); //Enlève le abort mais bon c'est pas très propre sans l'appel au destructeur
+    //engineInterface.~CEngineInterface(); //EnlÃ¨ve le abort mais bon c'est pas trÃ¨s propre sans l'appel au destructeur
     //engine.~CEngine();
 
     //glfwTerminate(); 

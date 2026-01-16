@@ -8,3 +8,11 @@ For that :
 - Open a terminal and cd to assimp-5.3.1
 - Then use : cmake -S . -B build
 - And : cmake --build build --config Release (or Debug)
+
+
+To run the project :
+- cd C:\Users\antoi\CLionProjects\OrchidEngine_CPP
+- mkdir build
+- cd build
+- cmake ..
+- cmake --build .

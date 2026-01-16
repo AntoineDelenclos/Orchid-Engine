@@ -2,6 +2,9 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb-master/stb_image.h>
 
+#include "imgui.h"
+#include "imgui_impl_opengl3.h"
+
 //Constructors & Destructors
 
 //Default constructor
@@ -52,9 +55,9 @@ CEngine::CEngine() {
 		piENGNumberOfEntities[i] = 0;
 	}
 	uiENGMaxNumberEntities = 256;
-	ppentENGAllEntitiesList = new (CEntity(*[uiENGMaxNumberEntities]));
-	pcubENGCubeEntitiesList = new (CCube[uiENGMaxNumberEntities]);
-	pligENGLightEntitiesList = new (CLight[uiENGMaxNumberEntities]);
+	ppentENGAllEntitiesList = new CEntity*[uiENGMaxNumberEntities];
+	pcubENGCubeEntitiesList = new CCube[uiENGMaxNumberEntities];
+	pligENGLightEntitiesList = new CLight[uiENGMaxNumberEntities];
 	ppentENGAllEntitiesList[0] = pcubENGCubeEntitiesList;
 	ppentENGAllEntitiesList[1] = pligENGLightEntitiesList;
 	puiENGNextFreeEntitiesIDs = new(unsigned int[TYPES_OF_ENTITIES]); 

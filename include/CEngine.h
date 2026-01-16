@@ -1,16 +1,7 @@
 #pragma once
-#include <iostream>
 #include <string>
-#include <chrono>
-#include <thread> //Utile depuis C++11 pour utiliser sleep_for() ou sleep_until()
-#include <cmath>
-#include <vector>
 
 //IMGUI Docking branch V1.90
-#include <imgui.h>
-#include <backends/imgui_impl_glfw.h>
-#include <backends/imgui_impl_opengl3.h>
-#include <misc/cpp/imgui_stdlib.h>
 
 /*
 #include "../EXTERNAL/IMGUI/imstb_textedit.h"
@@ -18,8 +9,6 @@
 #include "../EXTERNAL/IMGUI/imstb_truetype.h"*/ //Fonctionne pas car STB manque et n'est pas bien intégré dans le header
 
 //IMPLOT
-#include <implot-master/implot.h>
-#include <implot-master/implot_internal.h>
 
 //#define STB_IMAGE_IMPLEMENTATION
 //#include <stb_image.h>
@@ -29,13 +18,9 @@
 #include <GLFW/glfw3.h>
 
 //#include "ShlObj_core.h"
-#include <Windows.h>
 
-#include "GlobalTools.h"
-#include "CException.h"
 #include "entities/CEntity.h"
 #include "CShader.h"
-#include "CCamera.h"
 #include "CInputs.h"
 #include "entities/CCube.h"
 #include "entities/CLight.h"

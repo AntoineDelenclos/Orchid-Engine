@@ -198,7 +198,7 @@ glm::vec4 vec4HexToRGBAColor(std::string hex_code) {
         throw(exception);
     }
     std::vector<char> HEX = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
-    std::transform(hex_code.begin(), hex_code.end(), hex_code.begin(), std::toupper); //Pour mettre en majuscules
+    std::transform(hex_code.begin(), hex_code.end(), hex_code.begin(), [](unsigned char c) { return std::toupper(c); }); //Pour mettre en majuscules
     glm::vec4 color = glm::vec4(0,0,0,0);
     for (int i = 1; i < taille; i++) {
         std::vector<char>::iterator itr = std::find(HEX.begin(), HEX.end(), hex_code[i]);

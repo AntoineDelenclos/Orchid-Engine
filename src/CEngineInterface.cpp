@@ -1,5 +1,10 @@
 #include "../include/CEngineInterface.h"
 
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+#include "implot.h"
+
 
 CEngineInterface::CEngineInterface(CEngine &engine) {
     bEGIFullscreen = false;
@@ -435,7 +440,12 @@ void CEngineInterface::EGISelectedEntityModule(CEngine& engine) {
     //Pour nos différentes entités cubes
     if (siEGISelectedEntity_cube >= 0 && siEGISelectedType == 0) {
         ImGui::Checkbox("Active", &engine.pcubENGCubeEntitiesList[siEGISelectedEntity_cube].bENTActive);
-        ImGui::InputText("Name", &engine.pcubENGCubeEntitiesList[siEGISelectedEntity_cube].strENTName);
+        static char nameBuffer[128];
+        strcpy_s(nameBuffer, sizeof(nameBuffer),
+                 engine.pcubENGCubeEntitiesList[siEGISelectedEntity_cube].strENTName.c_str());
+        if (ImGui::InputText("Name", nameBuffer, sizeof(nameBuffer))) {
+            engine.pcubENGCubeEntitiesList[siEGISelectedEntity_cube].strENTName = nameBuffer;
+        }
         float Xc, Yc, Zc;
         int pos_cub = siEGISelectedEntity_cube;
         Xc = engine.pcubENGCubeEntitiesList[pos_cub].vec3ENTWorldPosition.x;
@@ -480,7 +490,12 @@ void CEngineInterface::EGISelectedEntityModule(CEngine& engine) {
     //Cas d'une Directional Light
     if (siEGISelectedEntity_dir_light >= 0 && siEGISelectedType == 1) {
         ImGui::Checkbox("Active", &engine.pligENGDirectionalLightsList[siEGISelectedEntity_dir_light].bENTActive);
-        ImGui::InputText("Name", &engine.pligENGDirectionalLightsList[siEGISelectedEntity_dir_light].strENTName);
+        static char nameBuffer[128];
+        strcpy_s(nameBuffer, sizeof(nameBuffer),
+                 engine.pligENGDirectionalLightsList[siEGISelectedEntity_dir_light].strENTName.c_str());
+        if (ImGui::InputText("Name", nameBuffer, sizeof(nameBuffer))) {
+            engine.pligENGDirectionalLightsList[siEGISelectedEntity_dir_light].strENTName = nameBuffer;
+        }
         unsigned int pos_lig = siEGISelectedEntity_dir_light;
         float Xl, Yl, Zl; //Update the cube light position (only when it's needed)
         Xl = engine.pligENGDirectionalLightsList[pos_lig].vec3ENTWorldPosition.x;
@@ -521,7 +536,12 @@ void CEngineInterface::EGISelectedEntityModule(CEngine& engine) {
     //Cas d'une Point Light
     if (siEGISelectedEntity_point_light >= 0 && siEGISelectedType == 2) {
         ImGui::Checkbox("Active", &engine.pligENGPointLightsList[siEGISelectedEntity_point_light].bENTActive);
-        ImGui::InputText("Name", &engine.pligENGPointLightsList[siEGISelectedEntity_point_light].strENTName);
+        static char nameBuffer[128];
+        strcpy_s(nameBuffer, sizeof(nameBuffer),
+                 engine.pligENGPointLightsList[siEGISelectedEntity_point_light].strENTName.c_str());
+        if (ImGui::InputText("Name", nameBuffer, sizeof(nameBuffer))) {
+            engine.pligENGPointLightsList[siEGISelectedEntity_point_light].strENTName = nameBuffer;
+        }
         unsigned int pos_lig = siEGISelectedEntity_point_light;
         float Xl, Yl, Zl; //Update the cube light position (only when it's needed)
         Xl = engine.pligENGPointLightsList[pos_lig].vec3ENTWorldPosition.x;
@@ -561,7 +581,12 @@ void CEngineInterface::EGISelectedEntityModule(CEngine& engine) {
     //Cas d'une Spotlight
     if (siEGISelectedEntity_spot_light >= 0 && siEGISelectedType == 3) {
         ImGui::Checkbox("Active", &engine.pligENGSpotLightsList[siEGISelectedEntity_spot_light].bENTActive);
-        ImGui::InputText("Name", &engine.pligENGSpotLightsList[siEGISelectedEntity_spot_light].strENTName);
+        static char nameBuffer[128];
+        strcpy_s(nameBuffer, sizeof(nameBuffer),
+                 engine.pligENGSpotLightsList[siEGISelectedEntity_spot_light].strENTName.c_str());
+        if (ImGui::InputText("Name", nameBuffer, sizeof(nameBuffer))) {
+            engine.pligENGSpotLightsList[siEGISelectedEntity_spot_light].strENTName = nameBuffer;
+        }
         unsigned int pos_lig = siEGISelectedEntity_spot_light;
         float Xl, Yl, Zl; //Update the cube light position (only when it's needed)
         Xl = engine.pligENGSpotLightsList[pos_lig].vec3ENTWorldPosition.x;
