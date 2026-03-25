@@ -2,7 +2,7 @@
 
 CInputs::CInputs() {
     mat4INPMovement = glm::mat4(1.0f);
-    strINPKeyBindsPathFile = "../../../configs/keybinds.txt";
+    strINPKeyBindsPathFile = "../configs/keybinds.txt";
     iINPCameraState = 0;
     dINPSensitivity = 0.05f;
     bINPFirstMouse = true;
@@ -12,7 +12,7 @@ CInputs::CInputs() {
 
 CInputs::CInputs(CCamera& camera) {
     mat4INPMovement = glm::mat4(1.0f);
-    strINPKeyBindsPathFile = "../../../configs/keybinds.txt";
+    strINPKeyBindsPathFile = "../configs/keybinds.txt";
     iINPCameraState = 0;
     dINPSensitivity = 0.1f;
     camINPChosenCamera = camera;

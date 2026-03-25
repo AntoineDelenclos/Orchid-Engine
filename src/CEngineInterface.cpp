@@ -247,7 +247,7 @@ void CEngineInterface::EGINewEntityModule(CEngine& engine) {
         if (entityTypeCombo == 0) {
             newEntityType = cube;
             unsigned int newEntityTypeId = engine.uiENGGetNextFreeEntityID(newEntityType);
-            CCube newCube = CCube(newEntityGlobalId, newEntityTypeId, newEntityWorldPosition, "../../../data/shaders/core.vert", "../../../data/shaders/core.frag", iEGITextureNumber, vec3EGINewEntityAmbient, vec3EGINewEntityDiffuse, vec3EGINewEntitySpecular, fEGINewEntityShininess, fEGINewEntityTransparency);
+            CCube newCube = CCube(newEntityGlobalId, newEntityTypeId, newEntityWorldPosition, "../data/shaders/core.vert", "../data/shaders/core.frag", iEGITextureNumber, vec3EGINewEntityAmbient, vec3EGINewEntityDiffuse, vec3EGINewEntitySpecular, fEGINewEntityShininess, fEGINewEntityTransparency);
             newCube.CUBChangeWorldPosition(newCube.vec3ENTWorldPosition);
             newCube.CUBScaleEntitySize(gfEGINewEntityScaleRatio);
             std::cout << newCube.uiCUBId << std::endl;
@@ -257,7 +257,7 @@ void CEngineInterface::EGINewEntityModule(CEngine& engine) {
         if (entityTypeCombo == 1) {
             newEntityType = dir_light;
             unsigned int newEntityTypeId = engine.uiENGGetNextFreeEntityID(newEntityType);
-            CLight newDirectionalLight = CLight(directional, newEntityTypeId, engine.uiENGGetNextFreeEntityID(dir_light), newEntityWorldPosition, glm::vec3(fEGINewDirectionX, fEGINewDirectionY, fEGINewDirectionZ), pgfEGINewLightColor, gfEGINewLightAmbientIntensity, gfEGINewLightDiffuseStrength, gfEGINewLightSpecularStrength, "../../../data/shaders/light.vert", "../../../data/shaders/light.frag", iEGITextureNumber);
+            CLight newDirectionalLight = CLight(directional, newEntityTypeId, engine.uiENGGetNextFreeEntityID(dir_light), newEntityWorldPosition, glm::vec3(fEGINewDirectionX, fEGINewDirectionY, fEGINewDirectionZ), pgfEGINewLightColor, gfEGINewLightAmbientIntensity, gfEGINewLightDiffuseStrength, gfEGINewLightSpecularStrength, "../data/shaders/light.vert", "../data/shaders/light.frag", iEGITextureNumber);
             newDirectionalLight.LIGFirstTimeSetVerticesPosition();
             rdrEGIRender.RDRCreateMandatoryForLight(engine, newDirectionalLight, newDirectionalLight.uiLIGId);
             engine.ENGAddLightEntity(newDirectionalLight);
@@ -265,14 +265,14 @@ void CEngineInterface::EGINewEntityModule(CEngine& engine) {
         if (entityTypeCombo == 2) {
             newEntityType = point_light;
             unsigned int newEntityTypeId = engine.uiENGGetNextFreeEntityID(newEntityType);
-            CLight newPointLight = CLight(point, newEntityTypeId, engine.uiENGGetNextFreeEntityID(point_light), newEntityWorldPosition, pgfEGINewLightColor, fEGINewKC, fEGINewKL, fEGINewKQ, gfEGINewLightAmbientIntensity, gfEGINewLightDiffuseStrength, gfEGINewLightSpecularStrength, "../../../data/shaders/light.vert", "../../../data/shaders/light.frag", iEGITextureNumber);
+            CLight newPointLight = CLight(point, newEntityTypeId, engine.uiENGGetNextFreeEntityID(point_light), newEntityWorldPosition, pgfEGINewLightColor, fEGINewKC, fEGINewKL, fEGINewKQ, gfEGINewLightAmbientIntensity, gfEGINewLightDiffuseStrength, gfEGINewLightSpecularStrength, "../data/shaders/light.vert", "../data/shaders/light.frag", iEGITextureNumber);
             rdrEGIRender.RDRCreateMandatoryForLight(engine, newPointLight, newPointLight.uiLIGId);
             engine.ENGAddLightEntity(newPointLight);
         }
         if (entityTypeCombo == 3) {
             newEntityType = spot_light;
             unsigned int newEntityTypeId = engine.uiENGGetNextFreeEntityID(newEntityType);
-            CLight newSpotLight = CLight(spot, newEntityTypeId, engine.uiENGGetNextFreeEntityID(spot_light), newEntityWorldPosition, glm::vec3(fEGINewDirectionX, fEGINewDirectionY, fEGINewDirectionZ), fEGINewLightInnerCutOff, fEGINewLightOuterCutOff, pgfEGINewLightColor, gfEGINewLightAmbientIntensity, gfEGINewLightDiffuseStrength, gfEGINewLightSpecularStrength, "../../../data/shaders/light.vert", "../../../data/shaders/light.frag", iEGITextureNumber);
+            CLight newSpotLight = CLight(spot, newEntityTypeId, engine.uiENGGetNextFreeEntityID(spot_light), newEntityWorldPosition, glm::vec3(fEGINewDirectionX, fEGINewDirectionY, fEGINewDirectionZ), fEGINewLightInnerCutOff, fEGINewLightOuterCutOff, pgfEGINewLightColor, gfEGINewLightAmbientIntensity, gfEGINewLightDiffuseStrength, gfEGINewLightSpecularStrength, "../data/shaders/light.vert", "../data/shaders/light.frag", iEGITextureNumber);
             rdrEGIRender.RDRCreateMandatoryForLight(engine, newSpotLight, newSpotLight.uiLIGId);
             engine.ENGAddLightEntity(newSpotLight);
         }

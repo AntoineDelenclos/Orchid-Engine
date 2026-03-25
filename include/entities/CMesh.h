@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
-#include <glm.hpp>
+#include <glm/glm.hpp>
 #include "../CShader.h"
 
 #define MAX_BONE_INFLUENCE 4

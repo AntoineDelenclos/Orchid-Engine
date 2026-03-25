@@ -43,11 +43,11 @@ CEngine::CEngine() {
 
 	//CEngine* enginecopy = this;
 	//prdrENGRenderPipeline = new CRender;
-	strENGAssetsTexturesFolder = "../../../data/assets/textures/"; //La racine était le .vcxproj. -> ../../Assets/Textures/
-	//La nouvelle racine est le dossier où est Orchid.exe alors ../../../data/assets/textures/
+	strENGAssetsTexturesFolder = "../data/assets/textures/"; //La racine était le .vcxproj. -> ../../Assets/Textures/
+	//La nouvelle racine est le dossier où est Orchid.exe alors ../data/assets/textures/
 
 	iENGMaxNumberOfTextures = 100;
-	pstrENGTexturesPath = new (std::string[iENGMaxNumberOfTextures]);
+	pstrENGTexturesPath = new std::string[iENGMaxNumberOfTextures];
 	//////////////////////////// AU DESSUS C EST DU VIEUX CODE AVEC LES TEXTURES
 
 	//Entities
@@ -227,9 +227,9 @@ void CEngine::ENGStart() {
 	}
 
 	//Creating shaders use in the engine
-	shaENGCoreShader = CShader("../../../data/shaders/core.vert", "../../../data/shaders/core.frag"); //La racine est le .vcxproj
-	shaENGLightShader = CShader("../../../data/shaders/light.vert", "../../../data/shaders/light.frag");
-	shaENGPostProcessShader = CShader("../../../data/shaders/post-process.vert", "../../../data/shaders/post-process.frag");
+	shaENGCoreShader = CShader("../data/shaders/core.vert", "../data/shaders/core.frag"); //La racine est le .vcxproj
+	shaENGLightShader = CShader("../data/shaders/light.vert", "../data/shaders/light.frag");
+	shaENGPostProcessShader = CShader("../data/shaders/post-process.vert", "../data/shaders/post-process.frag");
 
 	//Adding and loading all our texture files
 	CTexture tex_1 = CTexture("wall_0_4.png", true);
