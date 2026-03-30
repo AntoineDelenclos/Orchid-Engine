@@ -12,8 +12,8 @@
 #include <glm/gtc/type_ptr.hpp>
 
 //#define GLEW_STATIC //car on lie via gl32s.lib
-#include "../../libs/GLEW/glew-2.1.0-win32/glew-2.1.0/include/GL/glew.h"
-#include "../../libs/GLFW/glfw-3.3.8.bin.WIN64/glfw-3.3.8.bin.WIN64/include/GLFW/glfw3.h"
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 //Il faudra rajouter au fur et � mesure (player, model, et peut etre penser � diff�rencier les types de lumiere)
 enum entity_type_enum { cube, polyhedron, dir_light, point_light, spot_light, camera, entity, face };

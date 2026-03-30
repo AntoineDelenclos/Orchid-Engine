@@ -63,7 +63,7 @@ CEngineInterface::CEngineInterface(CEngine &engine) {
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; //Va permettre de mettre le docking en place 
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(engine.pwindowENGWindow, true);
-    ImGui_ImplOpenGL3_Init("#version 330");
+    ImGui_ImplOpenGL3_Init("#version 460");
 }
 
 CEngineInterface::~CEngineInterface() {
@@ -316,6 +316,7 @@ void CEngineInterface::EGIEntitiesListsModule(CEngine &engine) {
         }
         ImGui::EndChild();
     }
+
     std::string strHeaderDirLight = "Directional light entities ("; strHeaderDirLight += std::to_string(engine.iENGGetNumberOfEntitiesTypeX(dir_light)).c_str(); strHeaderDirLight += ')';
     if (ImGui::CollapsingHeader(strHeaderDirLight.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
         int draw_lines_directional = engine.iENGGetNumberOfEntitiesTypeX(dir_light);

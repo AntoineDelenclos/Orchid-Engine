@@ -7,8 +7,8 @@
 #include <cmath>
 
 //#define GLEW_STATIC //car on lie via gl32s.lib
-#include "../libs/GLEW/glew-2.1.0-win32/glew-2.1.0/include/GL/glew.h"
-#include "../libs/GLFW/glfw-3.3.8.bin.WIN64/glfw-3.3.8.bin.WIN64/include/GLFW/glfw3.h"
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 //GLM
 #include <glm/glm.hpp>
