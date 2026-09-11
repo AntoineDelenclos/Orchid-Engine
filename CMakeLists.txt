@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.20)
 
 # vcpkg config
-set(CMAKE_TOOLCHAIN_FILE "C:/Users/antoi/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
+if(DEFINED ENV{VCPKG_ROOT} AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+    set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
+endif()
 set(VCPKG_TARGET_TRIPLET x64-mingw-dynamic CACHE STRING "")
 
 project(OrchidEngine VERSION 1.0.0 LANGUAGES CXX)
