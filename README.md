@@ -14,4 +14,4 @@ Install the following vcpkg packages for MinGW (dynamic version) via cmd
 - vcpkg install assimp:x64-mingw-dynamic
 
 Then use CMake with the MinGW toolchain
-You will have to put the mingw/bin into your PATH
+You will have to put your {mingw\bin} path into your PATH
