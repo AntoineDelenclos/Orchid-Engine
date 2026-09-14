@@ -20,11 +20,6 @@ public:
 	int iEGIFpsLimiter;
 	int iEGIWidth;
 	int iEGIHeight;
-	GLfloat gfEGIBrightness;
-	GLfloat gfEGIContrast;
-	GLfloat gfEGISaturation;
-	GLfloat gfEGIGamma;
-	bool bEGINormeRec_709;
 
 	int iEGINombreTexturesParLigne;
 	int piEGITexturePanelSize[2];
@@ -76,7 +71,6 @@ public:
 	//IMGUI MODULES
 
 	void EGIEngineModule(CEngine& engine);
-	void EGIPostProcessingModule(CEngine& engine);
 	void EGIInputsModule(CEngine& engine);
 	void EGITexturesModule(CEngine& engine);
 	void EGIEntitiesListsModule(CEngine &engine);

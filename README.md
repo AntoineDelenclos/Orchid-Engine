@@ -1,6 +1,6 @@
 # OrchidEngine
 
-Orchid Engine is a game engine made in C++/OpenGL.
+Orchid Engine is a 3D engine made in C++/OpenGL.
 
 First time configuration:
 

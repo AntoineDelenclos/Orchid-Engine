@@ -14,11 +14,6 @@ CEngineInterface::CEngineInterface(CEngine &engine) {
     iEGIFpsLimiter = engine.iENGFpsLimiter;
     iEGIWidth = engine.uiENGWidth;
     iEGIHeight = engine.uiENGHeight;
-    gfEGIBrightness = engine.gfENGGetBrightness();
-    gfEGIContrast = engine.gfENGGetContrast();
-    gfEGISaturation = engine.gfENGGetSaturation();
-    gfEGIGamma = engine.gfENGGetGamma();
-    bEGINormeRec_709 = engine.bENGGetNormRec();
     piEGITexturePanelSize[0] = 32; //Taille minimum d'une fenêtre ImGui.
     piEGITexturePanelSize[1] = 32;
     iEGINombreTexturesParLigne = 1;
@@ -109,24 +104,6 @@ void CEngineInterface::EGIEngineModule(CEngine &engine) {
     }
     ImGui::ColorEdit4("Background color", engine.pgfENGBackgroundColor);
     ImGui::Checkbox("Wireframe display", &bEGIWireframeChecked);
-    ImGui::End();
-}
-
-//Interface for post processing
-void CEngineInterface::EGIPostProcessingModule(CEngine& engine) {
-    ImGui::Begin("Post-processing tools");
-    ImGui::SliderFloat("Brightness", &gfEGIBrightness, 0.0f, 1.0f);
-    ImGui::SliderFloat("Contrast", &gfEGIContrast, 0.0f, 4.0f);
-    ImGui::Checkbox("Norme Rec. 709", &bEGINormeRec_709);
-    ImGui::SliderFloat("Saturation", &gfEGISaturation, -20.0f, 20.0f);
-    ImGui::SliderFloat("Gamma", &gfEGIGamma, 0.0f, 4.0f);
-    if (ImGui::SmallButton("Reset to default values")) {
-        gfEGIBrightness = 1.0f;
-        gfEGIContrast = 1.0f;
-        gfEGISaturation = 1.0f;
-        gfEGIGamma = 1.0f;
-    }
-    ImGui::ShowAboutWindow(); //Window that will show informations about the current build of ImGui.
     ImGui::End();
 }
 
@@ -691,11 +668,6 @@ void CEngineInterface::EGIFullscreenUpdate(CEngine &engine) {
 //Fonction à compléter notamment avec les wireframe et le fullscreen car les laisser dans l'interface est moins logique
 void CEngineInterface::EGIInterfaceToEngine(CEngine &engine) {
     engine.ENGSetFpsLimit(iEGIFpsLimiter);
-    engine.ENGSetBrightness(gfEGIBrightness);
-    engine.ENGSetContrast(gfEGIContrast);
-    engine.ENGSetSaturation(gfEGISaturation);
-    engine.ENGSetGamma(gfEGIGamma);
-    engine.ENGSetNormRec(bEGINormeRec_709);
 }
 
 //Do the pre-update process
@@ -716,7 +688,6 @@ void CEngineInterface::EGIUpdate(CEngine &engine) {
     EGIDockingEngine(engine);
     EGIEngineModule(engine);
     EGIScriptEditorModule(engine);
-    EGIPostProcessingModule(engine);
     EGIInputsModule(engine);
     EGITexturesModule(engine);
     EGIEntitiesListsModule(engine);

@@ -229,7 +229,6 @@ void CEngine::ENGStart() {
 	//Creating shaders use in the engine
 	shaENGCoreShader = CShader("../data/shaders/core.vert", "../data/shaders/core.frag"); //La racine est le .vcxproj
 	shaENGLightShader = CShader("../data/shaders/light.vert", "../data/shaders/light.frag");
-	shaENGPostProcessShader = CShader("../data/shaders/post-process.vert", "../data/shaders/post-process.frag");
 
 	//Adding and loading all our texture files
 	CTexture tex_1 = CTexture("wall_0_4.png", true);

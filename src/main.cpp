@@ -3,8 +3,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "../include/CPostProcessing.h"
-#include "../include/CLogs.h"
 #include "../include/GlobalTools.h"
 #include "../include/CInputs.h"
 #include "../include/entities/CEntity.h"
@@ -286,8 +284,6 @@ int main() {
 
         /*engine.shaENGPostProcessShader.SHAUse();
         glUniform1i(glGetUniformLocation(engine.shaENGPostProcessShader.Program, "ourTexture"), 0);*/
-
-        render.RDRPostProcess(engine);
 
         //On reset le framebuffer après chaque frame.
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
