@@ -7,6 +7,7 @@
 
 
 CEngineInterface::CEngineInterface(CEngine &engine) {
+    bEGIFullscreenPrev = false;
     bEGIFullscreen = false;
     bEGIWireframeChecked = false;
     bEGIFPSPlotChecked = false;
@@ -607,14 +608,6 @@ void CEngineInterface::EGISelectedEntityModule(CEngine& engine) {
     ImGui::End();
 }
 
-void CEngineInterface::EGICameraModule(CEngine& engine, CCamera& camera) {
-
-}
-
-void CEngineInterface::EGIScriptEditorModule(CEngine& engine) {
-
-}
-
 void CEngineInterface::EGIDockingEngine(CEngine& engine) { //https://github.com/ocornut/imgui/issues/7067 documentation Novembre 2023
     //Dockspace
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
@@ -629,21 +622,6 @@ void CEngineInterface::EGIDockingEngine(CEngine& engine) { //https://github.com/
     ImGui::End();
 }
 
-void CEngineInterface::EGIDockingScriptEditor(CEngine& engine) {
-    ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-    ImGuiViewport* viewport = ImGui::GetMainViewport();
-    ImGui::SetNextWindowPos(viewport->WorkPos);
-    ImGui::SetNextWindowSize(viewport->WorkSize);
-    ImGui::SetNextWindowViewport(viewport->ID);
-    ImGui::Begin("Script Editor", NULL, window_flags);
-    ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-    ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None | ImGuiDockNodeFlags_PassthruCentralNode;
-    ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
-    ImGui::End();
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
 void CEngineInterface::EGIWireframeUpdate() {
     if (bEGIWireframeChecked == false) {
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -655,14 +633,21 @@ void CEngineInterface::EGIWireframeUpdate() {
 
 //Check if the render mode should be windowed or fullscreen
 void CEngineInterface::EGIFullscreenUpdate(CEngine &engine) {
+    if (bEGIFullscreen == bEGIFullscreenPrev) {
+        return;
+    }
+
     if (bEGIFullscreen == false) {
         int monitorXPos; int monitorYPos; int monitorWidth; int monitorHeight;
         glfwGetMonitorWorkarea(engine.pmonitorENGMonitor, &monitorXPos, &monitorYPos, &monitorWidth, &monitorHeight);
-        glfwSetWindowMonitor(engine.pwindowENGWindow, NULL, 50, 50, monitorWidth, monitorHeight, 0);
+        glfwSetWindowMonitor(engine.pwindowENGWindow, NULL, 20, 20, monitorWidth, monitorHeight, 0);
     }
-    else if (bEGIFullscreen == true) {
+    else {
         glfwSetWindowMonitor(engine.pwindowENGWindow, engine.pmonitorENGMonitor, 0, 0, engine.uiENGWidth, engine.uiENGHeight, 0);
+        glfwSwapInterval(0); //Désactive le VSync
     }
+
+    bEGIFullscreenPrev = bEGIFullscreen;
 }
 
 //Fonction à compléter notamment avec les wireframe et le fullscreen car les laisser dans l'interface est moins logique
@@ -687,17 +672,11 @@ void CEngineInterface::EGIUpdate(CEngine &engine) {
     //Interface Modules rendering methods
     EGIDockingEngine(engine);
     EGIEngineModule(engine);
-    EGIScriptEditorModule(engine);
     EGIInputsModule(engine);
     EGITexturesModule(engine);
     EGIEntitiesListsModule(engine);
     EGISelectedEntityModule(engine);
     EGINewEntityModule(engine);
-    EGICameraModule(engine, engine.inpENGInputs.camINPChosenCamera);
-    
-    if (bEGIScriptEditorON) {
-        EGIDockingScriptEditor(engine);
-    }
 
     EGIMenuBar(engine);
 
@@ -719,7 +698,7 @@ void CEngineInterface::EGIFramebufferModule(CEngine& engine, GLuint texture) {
     ImGui::End();
 }
 
-std::string CEngineInterface::openfiledialog(char* filter, HWND owner) {
+std::string CEngineInterface::strEGIOpenFileDialog(char* filter, HWND owner) {
     std::wstring src;
     const std::wstring title = L"Select a File";
     std::wstring filename(MAX_PATH, L'\0');
@@ -747,7 +726,7 @@ void CEngineInterface::EGIMenuBar(CEngine& engine) {
     ImGui::BeginMainMenuBar();
     if (ImGui::BeginMenu("Menu")) {
         if (ImGui::MenuItem("Open file", "Ctrl+O")) {
-            std::string pathFile = openfiledialog((char*)"All Files (*.*)\0*.*\0", NULL);
+            std::string pathFile = strEGIOpenFileDialog((char*)"All Files (*.*)\0*.*\0", NULL);
             std::cout << "path file : " << pathFile << std::endl;
         }
         ImGui::EndMenu();

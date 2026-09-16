@@ -8,10 +8,10 @@
 #define SIZE_TEXTURE_INTERFACE 100 //Taille de chaque texture dans les modules
 #define ACTIVE_COLOR "#00FF00" //Couleur dans l'interface qui va montrer si une entité est activée ou non
 #define UNACTIVE_COLOR "#FF0000"
-//class CTexture;
 
 class CEngineInterface {
 public:
+	bool bEGIFullscreenPrev;
 	bool bEGIFullscreen;
 	bool bEGIWireframeChecked;
 	bool bEGIFPSPlotChecked;
@@ -69,21 +69,18 @@ public:
 	void EGIChangeDisplayState();
 
 	//IMGUI MODULES
-
 	void EGIEngineModule(CEngine& engine);
 	void EGIInputsModule(CEngine& engine);
 	void EGITexturesModule(CEngine& engine);
 	void EGIEntitiesListsModule(CEngine &engine);
 	void EGINewEntityModule(CEngine& engine);
 	void EGISelectedEntityModule(CEngine& engine);
-	void EGICameraModule(CEngine& engine, CCamera& camera);
-	void EGIScriptEditorModule(CEngine& engine);
 	void EGIDockingEngine(CEngine& engine);
-	void EGIDockingScriptEditor(CEngine& engine);
+
 
 	void EGIFramebufferModule(CEngine& engine, GLuint texture);
 	void EGIMenuBar(CEngine& engine);
-	std::string openfiledialog(char* filter, HWND owner);
+	std::string strEGIOpenFileDialog(char* filter, HWND owner);
 
 	void EGIWireframeUpdate();
 	void EGIFullscreenUpdate(CEngine &engine);

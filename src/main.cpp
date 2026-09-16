@@ -35,7 +35,6 @@ static void handleWindowFocus(GLFWwindow* window, int focused) {
     }
 }
 
-//test switch
 int main() {
     engine.ENGStart();
     CEngineInterface engineInterface = CEngineInterface(engine);
@@ -133,14 +132,6 @@ int main() {
     render.RDRCreateMandatoryForLight(engine, testLight_5, testLight_5.uiLIGId);
     //engine.ENGAddLightEntity(testLight_5);
 
-    //for (int test_performance = 0; test_performance<100; test_performance++) {
-    //    CCube testCube = CCube(engine.uiENGGetNextFreeGlobalID(), engine.uiENGGetNextFreeEntityID(cube), glm::vec3(test_performance * 0.2f,test_performance*0.2f, test_performance * 0.2f), "INTERNAL/Shaders/core.vert", "INTERNAL/Shaders/core.frag", 0);
-    //    testCube.CUBFirstTimeSetVerticesPosition();
-    //    testCube.CUBScaleEntitySize(1.f);
-    //    render.RDRCreateMandatoryForCube(engine, testCube, testCube.uiCUBId); //Ici le numero correspond au numero de l'entité et donc de la paire (VAO,VBO)
-    //    engine.ENGAddCubeEntity(testCube);
-    //}
-
     //Key bindings
     engine.inpENGInputs.INPAddingKeybind("FORWARD", GLFW_KEY_W);
     engine.inpENGInputs.INPAddingKeybind("BACKWARD", GLFW_KEY_S);
@@ -198,15 +189,12 @@ int main() {
     CModel modelBackpack = CModel("../data/assets/models/abc/untitled.obj");
 
     while (!glfwWindowShouldClose(engine.pwindowENGWindow)) { //Loop until the user closes the window
-        //glViewport(0, 0, engine.iENGScreenWidth, engine.iENGScreenHeight); //Redimensionne relativement à la taille d'écran
-        
+
         //////////////////////TEST FRAMEBUFFER///////////////////
         glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
         glEnable(GL_DEPTH_TEST);
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
-        //render.RDRPostProcess(engine);
 
         engine.ENGLightUpdate();
 
@@ -243,37 +231,14 @@ int main() {
             glfwSetScrollCallback(engine.pwindowENGWindow, scroll_callback);
         }
 
-        //KEY_TEST  
-        // 
-        // Inutile pour l'instant
-        //  
-        /*if (glfwGetKey(engine.pwindowENGWindow, GLFW_KEY_B)) {
-            CLogs logs = CLogs("Logs/logs.txt");
-            std::string Text = "test des logs\nca marche\n";
-            logs.LOGWritingEntireLogs(Text);
-            logs.~CLogs();
-        }*/
-
         rotation = acceleration_rotation * rotation;
         translation = acceleration_translation * translation;
-        //std::cout << rotation;
-        //Create transformations
-        //Vector movement
-        
-        //movement = glm::vec3(0.0f, 0.0f, 0.0f);
-        //std::cout << glfwGetTime();
-        /*Pour tester avec une projection ortographique on peut utiliser
-        model = glm::rotate(model, 0.5f, glm::vec3(1.0f,0.0f,0.0f));
-        view = glm::translate(view, glm::vec3(screenWidth/2, screenHeight/2, -700.0f));*/
 
         engine.ENGCameraUpdate();
         engineInterface.EGIPreUpdate(engine);
         engineInterface.EGIUpdate(engine);
         render.RDRRenderingCubes(engine);
         render.RDRRenderingLightCubes(engine);
-        //glm::mat4 model = glm::mat4(1.0f);
-        //model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-        //model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
         
         //A RAJOUTER DANS UNE PIPELINE DE RENDU DEDIE
         modelShaders.SHAUse();
@@ -281,9 +246,6 @@ int main() {
         modelBackpack.Draw(engine.shaENGCoreShader);
 
         engine.ENGPreUpdateInputsValues();
-
-        /*engine.shaENGPostProcessShader.SHAUse();
-        glUniform1i(glGetUniformLocation(engine.shaENGPostProcessShader.Program, "ourTexture"), 0);*/
 
         //On reset le framebuffer après chaque frame.
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -313,14 +275,7 @@ int main() {
 
         render.RDRPostProcess(engine);
 
-        engine.ENGLightUpdate();
-        engine.ENGCameraUpdate();
-        engineInterface.EGIPreUpdate(engine);
-        engineInterface.EGIUpdate(engine);
-        engineInterface.EGIPostUpdate(engine);
-        render.RDRRenderingCubes(engine);
-        render.RDRRenderingLightCubes(engine);
-        engine.ENGPreUpdateInputsValues();
+
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0); //On va debind le framebuffer puis le rebind au début de chaque frame*/
         //glDeleteFramebuffers(1, &fbo);
@@ -331,29 +286,6 @@ int main() {
         //GLuint fbo;
         //glGenFramebuffers(1, &fbo);
         //glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-        
-        //GLuint colorTexture;
-        //glGenTextures(1, &colorTexture);
-        //glBindTexture(GL_TEXTURE_2D, colorTexture);
-        //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, engine.iENGScreenWidth, engine.iENGScreenHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTexture, 0);
-        //glViewport(200, 200, 400, 400);
-        //render.RDRPostProcess(engine);
-
-        //engine.ENGLightUpdate();
-        //engine.ENGCameraUpdate();
-        //engineInterface.EGIPreUpdate(engine);
-        //engineInterface.EGIUpdate(engine);
-        //engineInterface.EGIViewportTest(engine, colorTexture);
-        //engineInterface.EGIPostUpdate(engine);
-        //render.RDRRenderingCubes(engine);
-        //render.RDRRenderingLightCubes(engine);
-        //engine.ENGPreUpdateInputsValues();
-        ////Fin du test viewport
 
         glfwSwapBuffers(engine.pwindowENGWindow); //Swap front and back buffers
         engine.ENGFrameUpdate(); //Contains glfwPollEvents()
