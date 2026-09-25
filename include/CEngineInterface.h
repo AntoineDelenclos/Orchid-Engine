@@ -65,12 +65,9 @@ public:
 
 	CEngineInterface(CEngine &engine);
 	~CEngineInterface();
-	bool bEGIIsDisplayed();
-	void EGIChangeDisplayState();
 
 	//IMGUI MODULES
 	void EGIEngineModule(CEngine& engine);
-	void EGIInputsModule(CEngine& engine);
 	void EGITexturesModule(CEngine& engine);
 	void EGIEntitiesListsModule(CEngine &engine);
 	void EGINewEntityModule(CEngine& engine);

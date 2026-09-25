@@ -9,16 +9,14 @@
 
 //Default constructor
 CEngine::CEngine() {
-	std::cout << "avant initialisation" << std::endl;
 	glfwInit();
-	std::cout << "apres initialisation" << std::endl;
 	if (!glfwInit()) {
 		std::cout << "erreur initialisation" << std::endl;
 		CException exception(GLFW_INIT_ERREUR);
 		throw(exception);
 	}
-	uiENGWidth = 1920; //1280
-	uiENGHeight = 1080; //960
+	uiENGWidth = 1920;
+	uiENGHeight = 1080;
 	pgfENGBackgroundColor[0] = 0.2f;
 	pgfENGBackgroundColor[1] = 0.4f;
 	pgfENGBackgroundColor[2] = 0.8f;
@@ -93,13 +91,6 @@ CEngine::CEngine() {
 	pligENGPointLightsList = new(CLight[uiENGMaxNumberEntities]);
 	pligENGSpotLightsList = new(CLight[uiENGMaxNumberEntities]);
 
-	//Post-process
-	gfENGBrightness = 0.0f;
-	gfENGContrast = 1.0f;
-	gfENGSaturation = 1.0f;
-	gfENGGamma = 1.0f;
-	bENGNormeRec_709 = false;
-
 	inpENGInputs = CInputs();
 }
 
@@ -160,36 +151,6 @@ unsigned int CEngine::uiENGGetNextFreeEntityID(int type_of_entity) {
 unsigned int CEngine::uiENGGetNextFreeGlobalID() {
 	return uiENGNextFreeGlobalID;
 }
-void CEngine::ENGSetBrightness(GLfloat brightness) {
-	gfENGBrightness = brightness;
-}
-GLfloat CEngine::gfENGGetBrightness() {
-	return gfENGBrightness;
-}
-void CEngine::ENGSetContrast(GLfloat contrast) {
-	gfENGContrast = contrast;
-}
-GLfloat CEngine::gfENGGetContrast() {
-	return gfENGContrast;
-}
-void CEngine::ENGSetSaturation(GLfloat saturation) {
-	gfENGSaturation = saturation;
-}
-GLfloat CEngine::gfENGGetSaturation() {
-	return gfENGSaturation;
-}
-void CEngine::ENGSetGamma(GLfloat gamma) {
-	gfENGGamma = gamma;
-}
-GLfloat CEngine::gfENGGetGamma() {
-	return gfENGGamma;
-}
-void CEngine::ENGSetNormRec(bool norm) {
-	bENGNormeRec_709 = norm;
-}
-bool CEngine::bENGGetNormRec() {
-	return bENGNormeRec_709;
-}
 void CEngine::ENGSetAssetsTexturesFolder(std::string path) {
 	strENGAssetsTexturesFolder = path;
 }
@@ -201,7 +162,7 @@ std::string CEngine::strENGGetAssetsTexturesFolder() {
 
 //Launch the mandatory code line to run OpenGL and create the main window
 void CEngine::ENGStart() {
-	//Utilisation d'OpenGL 3.3 pour avoir les nouveautés:
+	//OpenGL version 4.6 (last version released):
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, 1); //Va permettre d'accéder au Debug Context (version 4.3+)
@@ -227,8 +188,8 @@ void CEngine::ENGStart() {
 	}
 
 	//Creating shaders use in the engine
-	shaENGCoreShader = CShader("../data/shaders/core.vert", "../data/shaders/core.frag"); //La racine est le .vcxproj
-	shaENGLightShader = CShader("../data/shaders/light.vert", "../data/shaders/light.frag");
+	shaENGCoreShader = CShader("../shaders/core.vert", "../shaders/core.frag");
+	shaENGLightShader = CShader("../shaders/light.vert", "../shaders/light.frag");
 
 	//Adding and loading all our texture files
 	CTexture tex_1 = CTexture("wall_0_4.png", true);
@@ -257,8 +218,6 @@ void CEngine::ENGStart() {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND); //Permet d'activer le canal de transparence (alpha)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	bENGHasFocus = true;
 }
 
 
@@ -415,21 +374,21 @@ void CEngine::ENGFrameUpdate() {
 	//ENGWireframeUpdate();
 	//ENGCameraUpdate();
 	ENGFpsCounterAndLimiter();
-	//ENGPostProcess();
-	
+
 	//ENGRender();
 
 	//Interface update
 }
 
 ////// ENTITY RELATED //////
-void CEngine::ENGAddCubeEntity(CCube cube) {
+void CEngine::ENGAddCubeEntity(CCube &cube) {
 	pcubENGCubeEntitiesList[puiENGNextFreeEntitiesIDs[0]] = cube;
 	ENGIncreaseNumberOfEntities(0, 1);
 	ENGIncrementNextFreeEntityID(0, 1);
+	mapStrIntENGNumberOfEachEntities["cube"] += 1;
 }
 
-void CEngine::ENGAddLightEntity(CLight light) {
+void CEngine::ENGAddLightEntity(CLight &light) {
 	//pligENGLightEntitiesList[puiENGNextFreeEntitiesIDs[2]] = light;
 	switch (light.enumLIGType) {
 	case (directional):
@@ -464,14 +423,10 @@ void CEngine::ENGPreUpdateInputsValues() {
 	inpENGInputs.dINPDiffTime = dENGDiffTime;
 }
 
-void CEngine::ENGRemoveCubeEntity(CCube& cube) {
-
-}
-
 ///// TEXTURES RELATED /////
 
 void CEngine::ENGAddTextureToAllTexturesList(CTexture texture) {
-	if (uiENGMaxNumberOfTextures > uiENGNumberOfTexturesFile + 1) {
+	if (uiENGNumberOfTexturesFile < uiENGMaxNumberOfTextures) {
 		ptexENGAllTextures[uiENGNumberOfTexturesFile] = texture;
 		uiENGNumberOfTexturesFile++;
 	}
@@ -507,13 +462,6 @@ void CTexture::TEXSetNumeroTexture(GLuint nr_tex) {
 GLuint CTexture::guiTEXGetNumeroTexture() {
 	return guiTEXNumeroTexture;
 }
-
-/*void CTexture::TEXSetImage(unsigned char* image) {
-	pucTEXImage = image;
-}
-unsigned char* CTexture::pucTEXGetImage() {
-	return pucTEXImage;
-}*/
 
 void CTexture::TEXSetTextureWidth(int width) {
 	iTEXTextureWidth = width;

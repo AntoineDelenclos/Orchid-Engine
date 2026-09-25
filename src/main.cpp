@@ -26,21 +26,12 @@ static void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
     engine.inpENGInputs.INPScrollCallback(window, xoffset, yoffset);
 }
-static void handleWindowFocus(GLFWwindow* window, int focused) {
-    if (focused == GL_TRUE) {
-        engine.bENGHasFocus = true;
-    }
-    else {
-        engine.bENGHasFocus = false;
-    }
-}
+
 
 int main() {
     engine.ENGStart();
     CEngineInterface engineInterface = CEngineInterface(engine);
     CRender render = CRender();
-
-    glfwSetWindowFocusCallback(engine.pwindowENGWindow, handleWindowFocus);
 
     glm::vec3 lightColor = glm::vec3(0.f, 0.66f, 0.4f);
     GLfloat lightColorFloat[3] = { 0.89f,0.66f,0.4f };
@@ -49,32 +40,13 @@ int main() {
     GLfloat diffuseStrength = 0.5f;
     GLfloat specularStrength = 0.5f;
     glm::vec3 pos_cube_light = { 1.3f, 1.3f, 1.3f };
-    //glm::mat4 lightModel = glm::mat4(1.0f);
-    //lightModel = glm::translate(lightModel, pos_cube_light);
-    //move_cube_coordinates(cube_light, pos_cube_light);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     engine.shaENGCoreShader.SHAUse();
     glUniform1i(glGetUniformLocation(engine.shaENGCoreShader.Program, "ourTexture"), 0);
     glUniform3f(glGetUniformLocation(engine.shaENGCoreShader.Program, "viewPos"), engine.inpENGInputs.camINPChosenCamera.vec3CAMCameraPosition.x, engine.inpENGInputs.camINPChosenCamera.vec3CAMCameraPosition.y, engine.inpENGInputs.camINPChosenCamera.vec3CAMCameraPosition.z);
-    
-    //glBindTexture(GL_TEXTURE_2D, 0);
-    //gluLookAt(0.9f, 0.9f, 0.9f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
-    //glm::mat4 model_test;
-    glm::mat4 projection;
-    glm::mat4 model = glm::mat4(1.0f);
-    glm::mat4 view = glm::mat4(1.0f);
-    
-    glm::mat4 movement = glm::mat4(1.0f); //Permet de définir les movements de caméra (mais donc bizarre car on pourrait travailler directement sur view ?)
-    
-    //fov : 45°, aspect ratio, near clipping plane, far clipping plane
-    projection = glm::perspective(90.0f, (GLfloat)engine.iENGScreenWidth/(GLfloat)engine.iENGScreenHeight, 0.1f, 1000.0f);
-    //projection = glm::ortho(0.0f, (GLfloat)screenWidth, 0.0f, (GLfloat)screenHeight, 0.1f, 1000.0f);
-    float rotation = 0.0f;
-    float translation = -0.00f;
-    float acceleration_rotation = 1.0f;
-    float acceleration_translation = 1.0f;
+
     int nb_frames = 0; //Permet de fixer des events en fonction du temps (par exemple au bout de 3 sec changer le sens de translation)
 
     glfwSetKeyCallback(engine.pwindowENGWindow, key_callback);
@@ -83,13 +55,13 @@ int main() {
     glm::vec3 Position_test_2(-0.3f, 1.f, 0.8f);
     glm::vec3 Position_nulle(0.f, 0.f, 0.f);
 
-    CCube testCube_1 = CCube(engine.uiENGGetNextFreeGlobalID(), engine.uiENGGetNextFreeEntityID(cube), Position_nulle, "../data/shaders/core.vert", "../data/shaders/core.frag", 2);
+    CCube testCube_1 = CCube(engine.uiENGGetNextFreeGlobalID(), engine.uiENGGetNextFreeEntityID(cube), Position_nulle, "../shaders/core.vert", "../shaders/core.frag", 2);
     testCube_1.CUBFirstTimeSetVerticesPosition();
     testCube_1.CUBScaleEntitySize(1.f);
     render.RDRCreateMandatoryForCube(engine, testCube_1, testCube_1.uiCUBId); //Ici le numero correspond au numero de l'entité et donc de la paire (VAO,VBO)
     //engine.ENGAddCubeEntity(testCube_1);
 
-    CCube testCube_2 = CCube(engine.uiENGGetNextFreeGlobalID(), engine.uiENGGetNextFreeEntityID(cube) , Position_test_1, "../data/shaders/core.vert", "../data/shaders/core.frag", 1); //Le dernier numéro correspond aux textures bind dans le moteur
+    CCube testCube_2 = CCube(engine.uiENGGetNextFreeGlobalID(), engine.uiENGGetNextFreeEntityID(cube) , Position_test_1, "../shaders/core.vert", "../shaders/core.frag", 1); //Le dernier numéro correspond aux textures bind dans le moteur
     testCube_2.CUBFirstTimeSetVerticesPosition();
     testCube_2.CUBScaleEntitySize(2.f);
     render.RDRCreateMandatoryForCube(engine, testCube_2, testCube_2.uiCUBId);
@@ -97,14 +69,14 @@ int main() {
 
     GLfloat ENTITYlightColorFloat_1[3] = { 1.f,0.f,1.f };
 
-    CLight testLight_1 = CLight(directional, engine.uiENGGetNextFreeGlobalID(), engine.uiENGGetNextFreeEntityID(dir_light), pos_cube_light, glm::vec3(1.f, 1.f, 1.f), ENTITYlightColorFloat_1, ambientIntensity, diffuseStrength, specularStrength, "../data/shaders/light.vert", "../data/shaders/light.frag", 3);
+    CLight testLight_1 = CLight(directional, engine.uiENGGetNextFreeGlobalID(), engine.uiENGGetNextFreeEntityID(dir_light), pos_cube_light, glm::vec3(1.f, 1.f, 1.f), ENTITYlightColorFloat_1, ambientIntensity, diffuseStrength, specularStrength, "../shaders/light.vert", "../shaders/light.frag", 3);
     testLight_1.LIGFirstTimeSetVerticesPosition();
     render.RDRCreateMandatoryForLight(engine, testLight_1, testLight_1.uiLIGId);
     //engine.ENGAddLightEntity(testLight_1);
     
     GLfloat colorlight2[3] = {0.f, 0.5f, 0.f};
 
-    CLight testLight_2 = CLight(directional, engine.uiENGGetNextFreeGlobalID(), engine.uiENGGetNextFreeEntityID(dir_light), Position_test_2, glm::vec3(1.f, 1.f, 1.f), colorlight2, ambientIntensity, diffuseStrength, specularStrength, "../data/shaders/light.vert", "../data/shaders/light.frag", 3);
+    CLight testLight_2 = CLight(directional, engine.uiENGGetNextFreeGlobalID(), engine.uiENGGetNextFreeEntityID(dir_light), Position_test_2, glm::vec3(1.f, 1.f, 1.f), colorlight2, ambientIntensity, diffuseStrength, specularStrength, "../shaders/light.vert", "../shaders/light.frag", 3);
     testLight_2.LIGFirstTimeSetVerticesPosition();
     render.RDRCreateMandatoryForLight(engine, testLight_2, testLight_2.uiLIGId);
     //engine.ENGAddLightEntity(testLight_2);
@@ -112,7 +84,7 @@ int main() {
     glm::vec3 Position_test_3 = glm::vec3(2.f, 2.f, 2.f);
     GLfloat colorlight3[3] = { 1.f, 1.f, 1.f };
 
-    CLight testLight_3 = CLight(point, engine.uiENGGetNextFreeGlobalID(), engine.uiENGGetNextFreeEntityID(point_light), Position_test_3, colorlight3, 1.0f, 0.09f, 0.032f, ambientIntensity, diffuseStrength, specularStrength, "../data/shaders/light.vert", "../data/shaders/light.frag", 3);
+    CLight testLight_3 = CLight(point, engine.uiENGGetNextFreeGlobalID(), engine.uiENGGetNextFreeEntityID(point_light), Position_test_3, colorlight3, 1.0f, 0.09f, 0.032f, ambientIntensity, diffuseStrength, specularStrength, "../shaders/light.vert", "../shaders/light.frag", 3);
     testLight_3.LIGFirstTimeSetVerticesPosition();
     render.RDRCreateMandatoryForLight(engine, testLight_3, testLight_3.uiLIGId);
     //engine.ENGAddLightEntity(testLight_3);
@@ -120,14 +92,14 @@ int main() {
     glm::vec3 Position_test_4 = glm::vec3(1.f, 3.f, 2.f);
     GLfloat colorlight4[3] = { 0.4f, 1.f, 0.2f };
 
-    CLight testLight_4 = CLight(spot, engine.uiENGGetNextFreeGlobalID(), engine.uiENGGetNextFreeEntityID(spot_light), Position_test_4, glm::vec3(1.f, 1.f, 1.f), 0.91f, 0.82f, colorlight4, ambientIntensity, diffuseStrength, specularStrength, "../data/shaders/light.vert", "../data/shaders/light.frag", 3);
+    CLight testLight_4 = CLight(spot, engine.uiENGGetNextFreeGlobalID(), engine.uiENGGetNextFreeEntityID(spot_light), Position_test_4, glm::vec3(1.f, 1.f, 1.f), 0.91f, 0.82f, colorlight4, ambientIntensity, diffuseStrength, specularStrength, "../shaders/light.vert", "../shaders/light.frag", 3);
     testLight_4.LIGFirstTimeSetVerticesPosition();
     render.RDRCreateMandatoryForLight(engine, testLight_4, testLight_4.uiLIGId);
     //engine.ENGAddLightEntity(testLight_4);
 
     glm::vec3 Position_test_5 = glm::vec3(2.f, 1.f, 0.f);
 
-    CLight testLight_5 = CLight(directional, engine.uiENGGetNextFreeGlobalID(), engine.uiENGGetNextFreeEntityID(dir_light), Position_test_5, glm::vec3(1.f, 1.f, 1.f), colorlight2, ambientIntensity, diffuseStrength, specularStrength, "../data/shaders/light.vert", "../data/shaders/light.frag", 3);
+    CLight testLight_5 = CLight(directional, engine.uiENGGetNextFreeGlobalID(), engine.uiENGGetNextFreeEntityID(dir_light), Position_test_5, glm::vec3(1.f, 1.f, 1.f), colorlight2, ambientIntensity, diffuseStrength, specularStrength, "../shaders/light.vert", "../shaders/light.frag", 3);
     testLight_5.LIGFirstTimeSetVerticesPosition();
     render.RDRCreateMandatoryForLight(engine, testLight_5, testLight_5.uiLIGId);
     //engine.ENGAddLightEntity(testLight_5);
@@ -146,6 +118,7 @@ int main() {
     engine.inpENGInputs.INPAddingKeybind("QUIT", GLFW_KEY_ESCAPE);
     engine.inpENGInputs.INPWriteMapBindingsOnTxtFile();
     std::string strMap = engine.inpENGInputs.strINPMapBindingsFromFileToString();
+    std::cout << strMap << std::endl;
     engine.inpENGInputs.INPMapBindings(strMap);
 
 
@@ -177,39 +150,16 @@ int main() {
     }
     glBindFramebuffer(GL_FRAMEBUFFER, 0); //Unbind the framebuffer
 
-    //20-10-2024 : Je crois que j'essaie de sauvegarder le framebuffer dans le channel de texture 0 et donc d'y appliquer les shaders post-process 
-    engine.shaENGPostProcessShader.SHAUse();
-    glUniform1i(glGetUniformLocation(engine.shaENGPostProcessShader.Program, "ourTexture"), 0);
-
-
-    //We will create our own shaders for the model as they function differently regarding texture (at the date of 20-10-2024)
-    //Just a copy of coreshader files to begin
-    CShader modelShaders = CShader("../data/shaders/model.vert", "../data/shaders/model.frag");
-
-    CModel modelBackpack = CModel("../data/assets/models/abc/untitled.obj");
+    CModel modelBackpack = CModel("../data/assets/models/backpack/backpack.obj");
 
     while (!glfwWindowShouldClose(engine.pwindowENGWindow)) { //Loop until the user closes the window
 
-        //////////////////////TEST FRAMEBUFFER///////////////////
         glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
         glEnable(GL_DEPTH_TEST);
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         engine.ENGLightUpdate();
-
-        //Permet de fusionner les textures
-        /*if (glfwGetKey(window, GLFW_KEY_Y)) {
-            glUniform1i(glGetUniformLocation(ourShader.Program, "ourTexture2"), 0);
-        }
-        glUniform1i(glGetUniformLocation(ourShader.Program, "ourTexture1"), 0);
-        */
-        //glUniform1i(glGetUniformLocation(ourShader.Program, "ourTexture2"), 1);
-
-        if (nb_frames > 180) {
-            translation = -1 * translation;
-            nb_frames = 0;
-        }
 
         engine.inpENGInputs.processInputs(engine.pwindowENGWindow);
         glfwSetKeyCallback(engine.pwindowENGWindow, key_callback);
@@ -231,9 +181,6 @@ int main() {
             glfwSetScrollCallback(engine.pwindowENGWindow, scroll_callback);
         }
 
-        rotation = acceleration_rotation * rotation;
-        translation = acceleration_translation * translation;
-
         engine.ENGCameraUpdate();
         engineInterface.EGIPreUpdate(engine);
         engineInterface.EGIUpdate(engine);
@@ -241,7 +188,6 @@ int main() {
         render.RDRRenderingLightCubes(engine);
         
         //A RAJOUTER DANS UNE PIPELINE DE RENDU DEDIE
-        modelShaders.SHAUse();
         engine.shaENGCoreShader.SHAUse();
         modelBackpack.Draw(engine.shaENGCoreShader);
 
@@ -256,7 +202,6 @@ int main() {
         GLfloat constantColor[] = { 0.3f,0.7f,1.0f,1.0f };
         glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, constantColor);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-        //render.RDRPostProcess(engine);
 
         engineInterface.EGIFramebufferModule(engine, 8); //Il faut penser à mettre le framebuffer en numéro 0
         engineInterface.EGIPostUpdate(engine);
@@ -272,10 +217,6 @@ int main() {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 400, 300, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        render.RDRPostProcess(engine);
-
-
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0); //On va debind le framebuffer puis le rebind au début de chaque frame*/
         //glDeleteFramebuffers(1, &fbo);
@@ -301,6 +242,6 @@ int main() {
     //engineInterface.~CEngineInterface(); //Enlève le abort mais bon c'est pas très propre sans l'appel au destructeur
     //engine.~CEngine();
 
-    //glfwTerminate(); 
+    //glfwTerminate();
     return 0;
 }

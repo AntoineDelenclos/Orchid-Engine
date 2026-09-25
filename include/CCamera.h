@@ -19,8 +19,9 @@ public:
 	GLfloat fCAMPitch;
 	GLfloat fCAMFovZoom;
 	float fCAMCameraSpeedMovement;
+	float fCAMCameraSensitivity;
+
 	glm::vec3 vec3CAMCameraPosition;
-	glm::vec3 vec3CAMCameraTarget;
 	glm::vec3 vec3CAMCameraDirection;
 	glm::vec3 vec3CAMCameraUp;
 	glm::vec3 vec3CAMCameraRight;

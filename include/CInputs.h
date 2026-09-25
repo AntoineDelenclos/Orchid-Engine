@@ -32,7 +32,6 @@ public:
 	int iINPCameraState;
 	double dINPLastMouseX;
 	double dINPLastMouseY;
-	double dINPSensitivity;
 	bool bINPFirstMouse;
 	CInputs();
 	CInputs(CCamera &camera);

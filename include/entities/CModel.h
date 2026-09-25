@@ -10,8 +10,8 @@ unsigned int TextureFromFile(const char* path, const std::string& directory, boo
 
 class CModel {
 public:
-    // model data 
-    std::vector<Texture> textures_loaded;	// stores all the textures loaded so far, optimization to make sure textures aren't loaded more than once.
+    //Model data
+    std::vector<Texture> textures_loaded;	//Stores all the textures loaded so far, optimization to make sure textures aren't loaded more than once.
     std::vector<CMesh> meshes;
     std::string directory;
     bool gammaCorrection;
