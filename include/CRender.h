@@ -26,4 +26,5 @@ public:
 
 	void RDRRenderingCubes(CEngine& engine);
 	void RDRRenderingLightCubes(CEngine& engine);
+	void RDRRenderingModels(CEngine& engine);
 };

@@ -7,6 +7,8 @@
 #include "CInputs.h"
 #include "entities/CCube.h"
 #include "entities/CLight.h"
+#include "entities/CModel.h"
+#include <vector>
 
 #define TYPES_OF_ENTITIES 8 //2 : directional, 3 : point, 4 : spot
 
@@ -50,6 +52,7 @@ public:
 	CEntity** ppentENGAllEntitiesList;
 	CCube* pcubENGCubeEntitiesList; //A utiliser comme pour ptexENGAllTextures, un CEntity* peut etre mieux qu'un CEntity**
 	CLight* pligENGLightEntitiesList;
+	std::vector<CModel> modENGModels; //3D models loaded with assimp
 
 	//Lights
 	int iENGNumberDirectionalLights; int iENGNumberActiveDirectionalLights;
@@ -122,6 +125,7 @@ public:
 	//Entity related
 	void ENGAddCubeEntity(CCube &cube);
 	void ENGAddLightEntity(CLight &light);
+	bool ENGAddModel(const std::string& path); //Returns false if the model could not be loaded
 	//unsigned int* puiENGEntitiesIdInTheLODArea();
 
 	//Textures related

@@ -148,7 +148,7 @@ int main() {
     }
     glBindFramebuffer(GL_FRAMEBUFFER, 0); //Unbind the framebuffer
 
-    CModel modelBackpack = CModel("../data/assets/models/backpack/backpack.obj");
+    engine.ENGAddModel("../data/assets/models/backpack/backpack.obj");
 
     while (!glfwWindowShouldClose(engine.pwindowENGWindow)) { //Loop until the user closes the window
 
@@ -186,8 +186,7 @@ int main() {
         render.RDRRenderingLightCubes(engine);
         
         //A RAJOUTER DANS UNE PIPELINE DE RENDU DEDIE
-        engine.shaENGCoreShader.SHAUse();
-        modelBackpack.Draw(engine.shaENGCoreShader);
+        render.RDRRenderingModels(engine);
 
         engine.ENGPreUpdateInputsValues();
 
