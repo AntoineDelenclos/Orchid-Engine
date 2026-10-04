@@ -20,7 +20,7 @@ void CRender::RDRCreateMandatoryForCube(CEngine& engine, CCube& cube_entity, int
 	//Texture coordinates
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
 	//Logique : 1 pour l'id d'attribution, 2 pour le nombre d'infos par point (cf vertices), 8* car maintenant 8 infos par vertices par sommet
-	// et 3* car le 1er �l�ment de texture coords commence au 3eme
+	// et 3* car le 1er élément de texture coords commence au 3eme
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(5 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(2);
@@ -75,7 +75,7 @@ void CRender::RDRCubeVerticesAndTextureRendering(CEngine &engine, CCube &cube_en
     glBindVertexArray(0);
 }
 
-//Est-ce qu'il vaudrait mieux pas mettre le contenu actuel de rdrlightrendering dans le render classique ? car ca d�pend du mat�riau et non de la lumiere
+//Est-ce qu'il vaudrait mieux pas mettre le contenu actuel de rdrlightrendering dans le render classique ? car ca dépend du matériau et non de la lumiere
 void CRender::RDRLightRenderingOnCube(CEngine& engine, CCube& cube_entity) {
 	engine.shaENGCoreShader.SHAUse(); //On utilise le shader avant de passer les uniform car uniform -> dernier shader actif
 	engine.shaENGCoreShader.SHASetMaterial(cube_entity.vec3CUBAmbient, cube_entity.fCUBShininess, cube_entity.fCUBTransparency);

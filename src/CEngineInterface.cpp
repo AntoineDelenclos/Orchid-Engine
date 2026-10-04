@@ -145,7 +145,7 @@ void CEngineInterface::EGINewEntityModule(CEngine& engine) {
     static int entityTypeCombo;
     const char* entityItems[] = { "Cube", "Directional Light", "Point Light", "SpotLight" };
     ImGui::Combo("Entity type", &entityTypeCombo, "Cube\0" "Directional Light\0" "Point Light\0" "SpotLight\0");
-    //Sliders for XYZ Axis posoition of the new entity
+    //Sliders for XYZ Axis position of the new entity
     const char* axisSliders[] = { "X", "Y", "Z" };
     for (int boucle_axe = 0; boucle_axe < 3; boucle_axe++) {
         std::string axisText = axisSliders[boucle_axe];
