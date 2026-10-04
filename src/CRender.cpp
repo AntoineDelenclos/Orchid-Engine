@@ -20,7 +20,7 @@ void CRender::RDRCreateMandatoryForCube(CEngine& engine, CCube& cube_entity, int
 	//Texture coordinates
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
 	//Logique : 1 pour l'id d'attribution, 2 pour le nombre d'infos par point (cf vertices), 8* car maintenant 8 infos par vertices par sommet
-	// et 3* car le 1er élément de texture coords commence au 3eme
+	// et 3* car le 1er ï¿½lï¿½ment de texture coords commence au 3eme
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(5 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(2);
@@ -70,33 +70,18 @@ void CRender::RDRCreateMandatoryForLight(CEngine& engine, CLight& light_entity, 
 }
 
 void CRender::RDRCubeVerticesAndTextureRendering(CEngine &engine, CCube &cube_entity, int number) {
-	glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, engine.ptexENGAllTextures[cube_entity.uiENTTextureEngineNumber].guiTEXGetNumeroTexture());
     glBindVertexArray(engine.puiENGVAOCubesEngine[number]);
     glDrawArrays(GL_TRIANGLES, 0, cube_entity.uiCUBVerticesSize / 8);
     glBindVertexArray(0);
 }
 
-//Est-ce qu'il vaudrait mieux pas mettre le contenu actuel de rdrlightrendering dans le render classique ? car ca dépend du matériau et non de la lumiere
+//Est-ce qu'il vaudrait mieux pas mettre le contenu actuel de rdrlightrendering dans le render classique ? car ca dï¿½pend du matï¿½riau et non de la lumiere
 void CRender::RDRLightRenderingOnCube(CEngine& engine, CCube& cube_entity) {
-	GLint materielAmbientUniformLocation = glGetUniformLocation(engine.shaENGCoreShader.Program, "material.ambient");
-	GLint materialDiffuseTextureUniformLocation = glGetUniformLocation(engine.shaENGCoreShader.Program, "material.diffuseTexture");
-	GLint materialSpecularTextureUniformLocation = glGetUniformLocation(engine.shaENGCoreShader.Program, "material.specularTexture");
-	GLint materialShininessUniformLocation = glGetUniformLocation(engine.shaENGCoreShader.Program, "material.shininess");
-	GLint materialTransparencyUniformLocation = glGetUniformLocation(engine.shaENGCoreShader.Program, "material.transparency");
 	engine.shaENGCoreShader.SHAUse(); //On utilise le shader avant de passer les uniform car uniform -> dernier shader actif
-	glUniform3f(materielAmbientUniformLocation, cube_entity.vec3CUBAmbient.x, cube_entity.vec3CUBAmbient.y, cube_entity.vec3CUBAmbient.z);
-	//glUniform3f(materialDiffuseUniformLocation, cube_entity.vec3CUBDiffuse.x, cube_entity.vec3CUBDiffuse.y, cube_entity.vec3CUBDiffuse.z);
-	//glUniform3f(materialSpecularUniformLocation, cube_entity.vec3CUBSpecular.x, cube_entity.vec3CUBSpecular.y, cube_entity.vec3CUBSpecular.z);
-	glUniform1f(materialShininessUniformLocation, cube_entity.fCUBShininess);
-	glUniform1f(materialTransparencyUniformLocation, cube_entity.fCUBTransparency);
-	
-	glUniform1i(materialDiffuseTextureUniformLocation, 0);
-	glUniform1i(materialSpecularTextureUniformLocation, 1);
+	engine.shaENGCoreShader.SHASetMaterial(cube_entity.vec3CUBAmbient, cube_entity.fCUBShininess, cube_entity.fCUBTransparency);
+	engine.shaENGCoreShader.SHABindTexture("material.diffuseTexture", engine.ptexENGAllTextures[cube_entity.uiENTTextureEngineNumber].guiTEXGetNumeroTexture(), 0);
+	engine.shaENGCoreShader.SHABindTexture("material.specularTexture", engine.ptexENGAllTextures[cube_entity.uiCUBSpecularTextureEngineNumber].guiTEXGetNumeroTexture(), 1);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, engine.ptexENGAllTextures[cube_entity.uiENTTextureEngineNumber].guiTEXGetNumeroTexture());
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, engine.ptexENGAllTextures[cube_entity.uiCUBSpecularTextureEngineNumber].guiTEXGetNumeroTexture());
 }
 
 void CRender::RDRLightVerticesAndTextureRendering(CEngine& engine, CLight& light_entity, int number) {

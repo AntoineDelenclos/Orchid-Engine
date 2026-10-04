@@ -15,6 +15,10 @@ public:
     std::vector<CMesh> meshes;
     std::string directory;
     bool gammaCorrection;
+    //Material values (mêmes défauts que CCube)
+    glm::vec3 vec3MODAmbient = glm::vec3(1.0f);
+    float fMODShininess = 0.25f;
+    float fMODTransparency = 1.0f;
     CModel(std::string const& path, bool gamma = false) : gammaCorrection(gamma)
     {
         loadModel(path);

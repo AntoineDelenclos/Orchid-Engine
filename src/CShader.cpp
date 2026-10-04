@@ -73,3 +73,15 @@ CShader::~CShader() {
 void CShader::SHAUse() {
 	glUseProgram(this->Program);
 }
+
+void CShader::SHABindTexture(const char* samplerName, GLuint textureId, GLuint unit) {
+	glActiveTexture(GL_TEXTURE0 + unit);
+	glBindTexture(GL_TEXTURE_2D, textureId);
+	glUniform1i(glGetUniformLocation(this->Program, samplerName), unit);
+}
+
+void CShader::SHASetMaterial(const glm::vec3& ambient, float shininess, float transparency) {
+	glUniform3f(glGetUniformLocation(this->Program, "material.ambient"), ambient.x, ambient.y, ambient.z);
+	glUniform1f(glGetUniformLocation(this->Program, "material.shininess"), shininess);
+	glUniform1f(glGetUniformLocation(this->Program, "material.transparency"), transparency);
+}

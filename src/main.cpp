@@ -16,7 +16,6 @@ CEngine engine = CEngine();
 static void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
-
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     engine.inpENGInputs.INPKeyCallback(window, key, scancode, action, mods);
 }
@@ -44,7 +43,6 @@ int main() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     engine.shaENGCoreShader.SHAUse();
-    glUniform1i(glGetUniformLocation(engine.shaENGCoreShader.Program, "ourTexture"), 0);
     glUniform3f(glGetUniformLocation(engine.shaENGCoreShader.Program, "viewPos"), engine.inpENGInputs.camINPChosenCamera.vec3CAMCameraPosition.x, engine.inpENGInputs.camINPChosenCamera.vec3CAMCameraPosition.y, engine.inpENGInputs.camINPChosenCamera.vec3CAMCameraPosition.z);
 
     int nb_frames = 0; //Permet de fixer des events en fonction du temps (par exemple au bout de 3 sec changer le sens de translation)

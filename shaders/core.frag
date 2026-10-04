@@ -6,8 +6,6 @@ in vec3 crntPos; //Fragment Position
 
 out vec4 FragColor;
 
-uniform sampler2D ourTexture;
-
 uniform vec3 viewPos;
 
 struct Material{
@@ -157,7 +155,7 @@ vec3 spotLightsGlobalCalcul(vec3 normal, vec3 view){
 }
 
 void main(){
-	vec4 TempObjectColor = (texture(ourTexture, TexCoord));
+	vec4 TempObjectColor = (texture(material.diffuseTexture, TexCoord));
 	vec3 ObjectColor = vec3(TempObjectColor.x, TempObjectColor.y, TempObjectColor.z);
 	
 	vec3 normalVec = normalize(Normal);
