@@ -8,32 +8,37 @@ CRender::~CRender() {
 }
 
 void CRender::RDRCreateMandatoryForCube(CEngine& engine, CCube& cube_entity, int number) {
-	std::cout << "Debug cube pgfCUBVertices : " << *cube_entity.pgfCUBVertices << std::endl;
+	//The engine list keeps its own copy of the entity (and so owns the CPU vertices, which must stay alive for later edits)
+	engine.ENGAddCubeEntity(cube_entity);
+
 	glGenVertexArrays(1, &engine.puiENGVAOCubesEngine[number]);
 	glGenBuffers(1, &engine.puiENGVBOCubesEngine[number]);
 	glBindVertexArray(engine.puiENGVAOCubesEngine[number]);
 	glBindBuffer(GL_ARRAY_BUFFER, engine.puiENGVBOCubesEngine[number]);
-	glBufferData(GL_ARRAY_BUFFER, cube_entity.uiCUBVerticesSize * sizeof(GLfloat) * 4, cube_entity.pgfCUBVertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, cube_entity.uiCUBVerticesSize * sizeof(GLfloat), cube_entity.pgfCUBVertices, GL_STATIC_DRAW);
 	//Position
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(0 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(0);
 	//Texture coordinates
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
 	//Logique : 1 pour l'id d'attribution, 2 pour le nombre d'infos par point (cf vertices), 8* car maintenant 8 infos par vertices par sommet
-	// et 3* car le 1er Ã©lÃ©ment de texture coords commence au 3eme
+	// et 3* car le 1er élément de texture coords commence au 3eme
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(5 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(2);
 	glBindVertexArray(0); //Unbind VAO
+}
 
-	engine.ENGAddCubeEntity(cube_entity);
-
-	delete[] cube_entity.pgfCUBVertices;
-	cube_entity.pgfCUBVertices = nullptr;
+//Re-upload the vertices of an already created cube (position, scale, ... changed)
+void CRender::RDRUpdateCubeBuffer(CEngine& engine, CCube& cube_entity, int number) {
+	if (cube_entity.pgfCUBVertices == nullptr) return;
+	glBindBuffer(GL_ARRAY_BUFFER, engine.puiENGVBOCubesEngine[number]);
+	glBufferData(GL_ARRAY_BUFFER, cube_entity.uiCUBVerticesSize * sizeof(GLfloat), cube_entity.pgfCUBVertices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void CRender::RDRCreateMandatoryForLight(CEngine& engine, CLight& light_entity, int number) {
-	std::cout << "Debug cube pgfCUBVertices : " << *light_entity.pgfLIGVertices << std::endl;
+	engine.ENGAddLightEntity(light_entity);
 
 	switch (light_entity.enumLIGType) {
 	case(directional):
@@ -55,18 +60,27 @@ void CRender::RDRCreateMandatoryForLight(CEngine& engine, CLight& light_entity, 
 		glBindBuffer(GL_ARRAY_BUFFER, engine.puiENGVBOSpotLightsEngine[number]);
 		break;
 	}
-	glBufferData(GL_ARRAY_BUFFER, light_entity.uiLIGVerticesSize * sizeof(GLfloat) * 4, light_entity.pgfLIGVertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, light_entity.uiLIGVerticesSize * sizeof(GLfloat), light_entity.pgfLIGVertices, GL_STATIC_DRAW);
 	//Position
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(0 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(1);
 	glBindVertexArray(0); //Unbind VAO
+}
 
-	engine.ENGAddLightEntity(light_entity);
-
-	delete[] light_entity.pgfLIGVertices;
-	light_entity.pgfLIGVertices = nullptr;
+//Re-upload the vertices of an already created light (position, scale, ... changed)
+void CRender::RDRUpdateLightBuffer(CEngine& engine, CLight& light_entity, int number) {
+	if (light_entity.pgfLIGVertices == nullptr) return;
+	GLuint vbo = 0;
+	switch (light_entity.enumLIGType) {
+	case(directional): vbo = engine.puiENGVBODirectionalLightsEngine[number]; break;
+	case(point):       vbo = engine.puiENGVBOPointLightsEngine[number]; break;
+	case(spot):        vbo = engine.puiENGVBOSpotLightsEngine[number]; break;
+	}
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, light_entity.uiLIGVerticesSize * sizeof(GLfloat), light_entity.pgfLIGVertices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void CRender::RDRCubeVerticesAndTextureRendering(CEngine &engine, CCube &cube_entity, int number) {
