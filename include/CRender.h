@@ -15,6 +15,8 @@ public:
 	void RDRCreateMandatoryForEntity(CEngine& engine, CEntity& entity, int number);
 	void RDRCreateMandatoryForCube(CEngine& engine, CCube& cube_entity, int number);
 	void RDRCreateMandatoryForLight(CEngine& engine, CLight& light_entity, int number);
+	void RDRUpdateCubeBuffer(CEngine& engine, CCube& cube_entity, int number);
+	void RDRUpdateLightBuffer(CEngine& engine, CLight& light_entity, int number);
 
 	void RDRCubeVerticesAndTextureRendering(CEngine &engine, CCube &cube_entity, int number);
 	void RDRLightVerticesAndTextureRendering(CEngine& engine, CLight& light_entity, int number);

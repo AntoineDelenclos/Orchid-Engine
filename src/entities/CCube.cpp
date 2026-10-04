@@ -10,6 +10,18 @@ CCube::CCube() {
 	pcENTFragmentShaderName = NULL;
 	pgfENTVertices = NULL;
 	uiENTVerticesSize = 0;
+	bENTActive = false;
+	uiENTTextureEngineNumber = 0;
+	uiCUBId = 0;
+	pgfCUBVertices = nullptr;
+	uiCUBVerticesSize = 0;
+	gfCUBScaleRatio = 1.f;
+	gfCUBLength = 1.f; gfCUBHeight = 1.f; gfCUBDepth = 1.f;
+	vec3CUBAmbient = vec3CUBDiffuse = vec3CUBSpecular = glm::vec3(1.0f);
+	fCUBShininess = 0.25f;
+	fCUBTransparency = 1.0f;
+	uiCUBTextureEngineNumber = 0;
+	uiCUBSpecularTextureEngineNumber = 0;
 }
 
 CCube::CCube(unsigned int id_global, unsigned int id_cube, glm::vec3 position, const char* vsFile, const char* fragFile, int texture_number) {
@@ -26,6 +38,8 @@ CCube::CCube(unsigned int id_global, unsigned int id_cube, glm::vec3 position, c
 	pgfCUBVertices = temp_vertices;
 	uiCUBVerticesSize = 288;
 	gfCUBScaleRatio = 1.f;
+	gfCUBLength = 1.f; gfCUBHeight = 1.f; gfCUBDepth = 1.f;
+	uiCUBTextureEngineNumber = texture_number;
 	vec3ENTWorldPosition = position;
 	pcENTVertexShaderName = vsFile;
 	pcENTFragmentShaderName = fragFile;
@@ -53,6 +67,8 @@ CCube::CCube(unsigned int id_global, unsigned int id_cube, glm::vec3 position, c
 	pgfCUBVertices = temp_vertices;
 	uiCUBVerticesSize = 288;
 	gfCUBScaleRatio = 1.f;
+	gfCUBLength = 1.f; gfCUBHeight = 1.f; gfCUBDepth = 1.f;
+	uiCUBTextureEngineNumber = texture_number;
 	vec3ENTWorldPosition = position;
 	pcENTVertexShaderName = vsFile;
 	pcENTFragmentShaderName = fragFile;

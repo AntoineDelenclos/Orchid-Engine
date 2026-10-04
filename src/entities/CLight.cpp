@@ -10,6 +10,18 @@ CLight::CLight() {
 	pcENTFragmentShaderName = NULL;
 	pgfENTVertices = NULL;
 	uiENTVerticesSize = 0;
+	uiENTTextureEngineNumber = 0;
+	uiLIGId = 0;
+	pgfLIGVertices = nullptr;
+	uiLIGVerticesSize = 0;
+	gfLIGScaleRatio = 1.f;
+	enumLIGType = directional;
+	vec3LIGColorLight = glm::vec3(1.f);
+	gfLIGColorLight[0] = gfLIGColorLight[1] = gfLIGColorLight[2] = 1.f;
+	gfLIGAmbientIntensity = 0.f; gfLIGDiffuseStrength = 0.f; gfLIGSpecularStrength = 0.f;
+	vec3LIGDirection = glm::vec3(1.f);
+	fLIGPointKC = 1.f; fLIGPointKL = 0.09f; fLIGPointKQ = 0.032f;
+	fLIGInnerCutOff = 0.91f; fLIGOuterCutOff = 0.82f;
 }
 
 //Directional lights
@@ -40,6 +52,8 @@ CLight::CLight(light_type_enum type, unsigned int id_global, unsigned int id_lig
 	pcENTFragmentShaderName = fragFile;
 	uiENTTextureEngineNumber = texture_number;
 	vec3LIGDirection = direction;
+	fLIGPointKC = 1.f; fLIGPointKL = 0.09f; fLIGPointKQ = 0.032f;
+	fLIGInnerCutOff = 0.91f; fLIGOuterCutOff = 0.82f;
 }
 
 //Point lights
@@ -72,6 +86,8 @@ CLight::CLight(light_type_enum type, unsigned int id_global, unsigned int id_lig
 	fLIGPointKC = constant;
 	fLIGPointKL = linear;
 	fLIGPointKQ = quadratic;
+	vec3LIGDirection = glm::vec3(1.f);
+	fLIGInnerCutOff = 0.91f; fLIGOuterCutOff = 0.82f;
 }
 
 //Spotlights
@@ -104,6 +120,7 @@ CLight::CLight(light_type_enum type, unsigned int id_global, unsigned int id_lig
 	vec3LIGDirection = direction;
 	fLIGInnerCutOff = innercutoff;
 	fLIGOuterCutOff = outercutoff;
+	fLIGPointKC = 1.f; fLIGPointKL = 0.09f; fLIGPointKQ = 0.032f;
 }
 CLight::~CLight() {
 
