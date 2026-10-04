@@ -4,9 +4,11 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "implot.h"
+#include "interface_modules/CIMCamera.h"
 
 
 CEngineInterface::CEngineInterface(CEngine &engine) {
+    bEGIFullscreenPrev = false;
     bEGIFullscreen = false;
     bEGIWireframeChecked = false;
     bEGIFPSPlotChecked = false;
@@ -107,18 +109,13 @@ void CEngineInterface::EGIEngineModule(CEngine &engine) {
     ImGui::End();
 }
 
-//Interface for inputs
-void CEngineInterface::EGIInputsModule(CEngine &engine) {
-
-}
-
 //Interface for textures
 void CEngineInterface::EGITexturesModule(CEngine &engine) {
     ImGui::SetNextWindowSizeConstraints(ImVec2(0, 0), ImVec2((float)engine.iENGScreenWidth, (float)engine.iENGScreenHeight));
     ImGui::SetNextWindowSize(ImVec2((float)piEGITexturePanelSize[0], (float)piEGITexturePanelSize[1]));
     ImGui::Begin("Textures");
     int nombre_texture_par_ligne = (int)(ImGui::GetWindowSize()[0]/SIZE_TEXTURE_INTERFACE);
-    if (nombre_texture_par_ligne != 0 && engine.bENGHasFocus) { //Cas où on est sur la fenêtre (on va alors freeze lors des ALT+TAB)
+    if (nombre_texture_par_ligne != 0) { //Cas où on est sur la fenêtre (on va alors freeze lors des ALT+TAB)
         iEGINombreTexturesParLigne = nombre_texture_par_ligne; //Permet de resize l'interface de sélection de texture en fonction de ce que souhaite l'utilisateur
         piEGITexturePanelSize[0] = (int)ImGui::GetWindowSize()[0]; //On veut stocker les valeurs de la fenêtre ImGui pour pouvoir avoir les bonnes dimensions lorsqu'on revient sur la fenêtre
         piEGITexturePanelSize[1] = (int)ImGui::GetWindowSize()[1];
@@ -224,7 +221,7 @@ void CEngineInterface::EGINewEntityModule(CEngine& engine) {
         if (entityTypeCombo == 0) {
             newEntityType = cube;
             unsigned int newEntityTypeId = engine.uiENGGetNextFreeEntityID(newEntityType);
-            CCube newCube = CCube(newEntityGlobalId, newEntityTypeId, newEntityWorldPosition, "../data/shaders/core.vert", "../data/shaders/core.frag", iEGITextureNumber, vec3EGINewEntityAmbient, vec3EGINewEntityDiffuse, vec3EGINewEntitySpecular, fEGINewEntityShininess, fEGINewEntityTransparency);
+            CCube newCube = CCube(newEntityGlobalId, newEntityTypeId, newEntityWorldPosition, "../shaders/core.vert", "../shaders/core.frag", iEGITextureNumber, vec3EGINewEntityAmbient, vec3EGINewEntityDiffuse, vec3EGINewEntitySpecular, fEGINewEntityShininess, fEGINewEntityTransparency);
             newCube.CUBChangeWorldPosition(newCube.vec3ENTWorldPosition);
             newCube.CUBScaleEntitySize(gfEGINewEntityScaleRatio);
             std::cout << newCube.uiCUBId << std::endl;
@@ -234,7 +231,7 @@ void CEngineInterface::EGINewEntityModule(CEngine& engine) {
         if (entityTypeCombo == 1) {
             newEntityType = dir_light;
             unsigned int newEntityTypeId = engine.uiENGGetNextFreeEntityID(newEntityType);
-            CLight newDirectionalLight = CLight(directional, newEntityTypeId, engine.uiENGGetNextFreeEntityID(dir_light), newEntityWorldPosition, glm::vec3(fEGINewDirectionX, fEGINewDirectionY, fEGINewDirectionZ), pgfEGINewLightColor, gfEGINewLightAmbientIntensity, gfEGINewLightDiffuseStrength, gfEGINewLightSpecularStrength, "../data/shaders/light.vert", "../data/shaders/light.frag", iEGITextureNumber);
+            CLight newDirectionalLight = CLight(directional, newEntityTypeId, engine.uiENGGetNextFreeEntityID(dir_light), newEntityWorldPosition, glm::vec3(fEGINewDirectionX, fEGINewDirectionY, fEGINewDirectionZ), pgfEGINewLightColor, gfEGINewLightAmbientIntensity, gfEGINewLightDiffuseStrength, gfEGINewLightSpecularStrength, "../shaders/light.vert", "../shaders/light.frag", iEGITextureNumber);
             newDirectionalLight.LIGFirstTimeSetVerticesPosition();
             rdrEGIRender.RDRCreateMandatoryForLight(engine, newDirectionalLight, newDirectionalLight.uiLIGId);
             engine.ENGAddLightEntity(newDirectionalLight);
@@ -242,14 +239,14 @@ void CEngineInterface::EGINewEntityModule(CEngine& engine) {
         if (entityTypeCombo == 2) {
             newEntityType = point_light;
             unsigned int newEntityTypeId = engine.uiENGGetNextFreeEntityID(newEntityType);
-            CLight newPointLight = CLight(point, newEntityTypeId, engine.uiENGGetNextFreeEntityID(point_light), newEntityWorldPosition, pgfEGINewLightColor, fEGINewKC, fEGINewKL, fEGINewKQ, gfEGINewLightAmbientIntensity, gfEGINewLightDiffuseStrength, gfEGINewLightSpecularStrength, "../data/shaders/light.vert", "../data/shaders/light.frag", iEGITextureNumber);
+            CLight newPointLight = CLight(point, newEntityTypeId, engine.uiENGGetNextFreeEntityID(point_light), newEntityWorldPosition, pgfEGINewLightColor, fEGINewKC, fEGINewKL, fEGINewKQ, gfEGINewLightAmbientIntensity, gfEGINewLightDiffuseStrength, gfEGINewLightSpecularStrength, "../shaders/light.vert", "../shaders/light.frag", iEGITextureNumber);
             rdrEGIRender.RDRCreateMandatoryForLight(engine, newPointLight, newPointLight.uiLIGId);
             engine.ENGAddLightEntity(newPointLight);
         }
         if (entityTypeCombo == 3) {
             newEntityType = spot_light;
             unsigned int newEntityTypeId = engine.uiENGGetNextFreeEntityID(newEntityType);
-            CLight newSpotLight = CLight(spot, newEntityTypeId, engine.uiENGGetNextFreeEntityID(spot_light), newEntityWorldPosition, glm::vec3(fEGINewDirectionX, fEGINewDirectionY, fEGINewDirectionZ), fEGINewLightInnerCutOff, fEGINewLightOuterCutOff, pgfEGINewLightColor, gfEGINewLightAmbientIntensity, gfEGINewLightDiffuseStrength, gfEGINewLightSpecularStrength, "../data/shaders/light.vert", "../data/shaders/light.frag", iEGITextureNumber);
+            CLight newSpotLight = CLight(spot, newEntityTypeId, engine.uiENGGetNextFreeEntityID(spot_light), newEntityWorldPosition, glm::vec3(fEGINewDirectionX, fEGINewDirectionY, fEGINewDirectionZ), fEGINewLightInnerCutOff, fEGINewLightOuterCutOff, pgfEGINewLightColor, gfEGINewLightAmbientIntensity, gfEGINewLightDiffuseStrength, gfEGINewLightSpecularStrength, "../shaders/light.vert", "../shaders/light.frag", iEGITextureNumber);
             rdrEGIRender.RDRCreateMandatoryForLight(engine, newSpotLight, newSpotLight.uiLIGId);
             engine.ENGAddLightEntity(newSpotLight);
         }
@@ -607,14 +604,6 @@ void CEngineInterface::EGISelectedEntityModule(CEngine& engine) {
     ImGui::End();
 }
 
-void CEngineInterface::EGICameraModule(CEngine& engine, CCamera& camera) {
-
-}
-
-void CEngineInterface::EGIScriptEditorModule(CEngine& engine) {
-
-}
-
 void CEngineInterface::EGIDockingEngine(CEngine& engine) { //https://github.com/ocornut/imgui/issues/7067 documentation Novembre 2023
     //Dockspace
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
@@ -629,21 +618,6 @@ void CEngineInterface::EGIDockingEngine(CEngine& engine) { //https://github.com/
     ImGui::End();
 }
 
-void CEngineInterface::EGIDockingScriptEditor(CEngine& engine) {
-    ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-    ImGuiViewport* viewport = ImGui::GetMainViewport();
-    ImGui::SetNextWindowPos(viewport->WorkPos);
-    ImGui::SetNextWindowSize(viewport->WorkSize);
-    ImGui::SetNextWindowViewport(viewport->ID);
-    ImGui::Begin("Script Editor", NULL, window_flags);
-    ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-    ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None | ImGuiDockNodeFlags_PassthruCentralNode;
-    ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
-    ImGui::End();
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
 void CEngineInterface::EGIWireframeUpdate() {
     if (bEGIWireframeChecked == false) {
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -655,14 +629,21 @@ void CEngineInterface::EGIWireframeUpdate() {
 
 //Check if the render mode should be windowed or fullscreen
 void CEngineInterface::EGIFullscreenUpdate(CEngine &engine) {
+    if (bEGIFullscreen == bEGIFullscreenPrev) {
+        return;
+    }
+
     if (bEGIFullscreen == false) {
         int monitorXPos; int monitorYPos; int monitorWidth; int monitorHeight;
         glfwGetMonitorWorkarea(engine.pmonitorENGMonitor, &monitorXPos, &monitorYPos, &monitorWidth, &monitorHeight);
-        glfwSetWindowMonitor(engine.pwindowENGWindow, NULL, 50, 50, monitorWidth, monitorHeight, 0);
+        glfwSetWindowMonitor(engine.pwindowENGWindow, NULL, 20, 20, monitorWidth, monitorHeight, 0);
     }
-    else if (bEGIFullscreen == true) {
+    else {
         glfwSetWindowMonitor(engine.pwindowENGWindow, engine.pmonitorENGMonitor, 0, 0, engine.uiENGWidth, engine.uiENGHeight, 0);
+        glfwSwapInterval(0); //Désactive le VSync
     }
+
+    bEGIFullscreenPrev = bEGIFullscreen;
 }
 
 //Fonction à compléter notamment avec les wireframe et le fullscreen car les laisser dans l'interface est moins logique
@@ -687,17 +668,11 @@ void CEngineInterface::EGIUpdate(CEngine &engine) {
     //Interface Modules rendering methods
     EGIDockingEngine(engine);
     EGIEngineModule(engine);
-    EGIScriptEditorModule(engine);
-    EGIInputsModule(engine);
+    CIMCamera::CIMCameraInterfaceModule(engine.inpENGInputs.camINPChosenCamera);
     EGITexturesModule(engine);
     EGIEntitiesListsModule(engine);
     EGISelectedEntityModule(engine);
     EGINewEntityModule(engine);
-    EGICameraModule(engine, engine.inpENGInputs.camINPChosenCamera);
-    
-    if (bEGIScriptEditorON) {
-        EGIDockingScriptEditor(engine);
-    }
 
     EGIMenuBar(engine);
 
@@ -719,7 +694,7 @@ void CEngineInterface::EGIFramebufferModule(CEngine& engine, GLuint texture) {
     ImGui::End();
 }
 
-std::string CEngineInterface::openfiledialog(char* filter, HWND owner) {
+std::string CEngineInterface::strEGIOpenFileDialog(char* filter, HWND owner) {
     std::wstring src;
     const std::wstring title = L"Select a File";
     std::wstring filename(MAX_PATH, L'\0');
@@ -747,7 +722,7 @@ void CEngineInterface::EGIMenuBar(CEngine& engine) {
     ImGui::BeginMainMenuBar();
     if (ImGui::BeginMenu("Menu")) {
         if (ImGui::MenuItem("Open file", "Ctrl+O")) {
-            std::string pathFile = openfiledialog((char*)"All Files (*.*)\0*.*\0", NULL);
+            std::string pathFile = strEGIOpenFileDialog((char*)"All Files (*.*)\0*.*\0", NULL);
             std::cout << "path file : " << pathFile << std::endl;
         }
         ImGui::EndMenu();

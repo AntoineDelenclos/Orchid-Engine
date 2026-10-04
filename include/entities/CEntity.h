@@ -15,16 +15,15 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-//Il faudra rajouter au fur et ï¿½ mesure (player, model, et peut etre penser ï¿½ diffï¿½rencier les types de lumiere)
+//Il faudra rajouter au fur et a mesure (player, model, et peut etre penser a differencier les types de lumiere)
 enum entity_type_enum { cube, polyhedron, dir_light, point_light, spot_light, camera, entity, face };
 
 class CEntity {
-//private:
 public:
 	entity_type_enum enumENTType;
 	unsigned int uiENTId;
     std::string strENTName;
-	//On va translate de cette position aprï¿½s l'avoir dessinï¿½ en (0,0,0) pour ï¿½viter des soucis avec les transformations matricielles
+	//On va translate de cette position apres l'avoir dessine en (0,0,0) pour eviter des soucis avec les transformations matricielles
 	glm::vec3 vec3ENTWorldPosition;
     bool bENTActive; //If an entity is inactive : no render, no consequences to the surroundings.
 
@@ -33,51 +32,52 @@ public:
     GLfloat* pgfENTVertices;
     unsigned int uiENTVerticesSize; 
 
-    //On peut stocker le numï¿½ro de la texture dans l'ensemble des textures ? Et si on fait une liste sï¿½lectionnable si des textures
-    // ca devrait fonctionner
+    //On peut stocker le numero de la texture dans l'ensemble des textures ? Et si on fait une liste selectionnable si des textures
+    //ca devrait fonctionner
     unsigned int uiENTTextureEngineNumber;
-    //Peut etre stocker l'adresse du VAO ou bien sa position dans le VAO/VBO (vbo plutï¿½t) et ensuite modifier le vbo avec glBufferSubData par exemple
-//public:
+    //Peut etre stocker l'adresse du VAO ou bien sa position dans le VAO/VBO (vbo plutot) et ensuite modifier le vbo avec glBufferSubData par exemple
     //Les vertices d'un cube de base
     static const GLfloat* cubeVertices() {
-        //Par dï¿½faut dans OpenGL les valeurs de l'ï¿½cran vont de -1 ï¿½ 1
-        static const GLfloat cVer[288] = { //Perspective projection Dï¿½finition d'un cube
+        //Par défaut dans OpenGL les valeurs de l'écran vont de -1 à 1
+        static const GLfloat cVer[288] = { //Perspective projection Définition d'un cube
             //Positions           //Texture Coords    //Normal
+            //Page 8 du carnet contient la référence des faces.
+            //Face 4
             -0.1f, -0.1f, -0.1f,  0.0f, 0.0f,  0.0f, 0.0f, -1.0f, //All normals goes to zero at initializing
             0.1f, -0.1f, -0.1f,  1.0f, 0.0f,  0.0f, 0.0f, -1.0f,
             0.1f,  0.1f, -0.1f,  1.0f, 1.0f,  0.0f, 0.0f, -1.0f, //tester avec notre fonction normalizevector
             0.1f,  0.1f, -0.1f,  1.0f, 1.0f,  0.0f, 0.0f, -1.0f,
             -0.1f,  0.1f, -0.1f,  0.0f, 1.0f,  0.0f, 0.0f, -1.0f,
             -0.1f, -0.1f, -0.1f,  0.0f, 0.0f,  0.0f, 0.0f, -1.0f,
-
+            //Face 1
             -0.1f, -0.1f,  0.1f,  0.0f, 0.0f,  0.0f, 0.0f, 1.0f,
             0.1f, -0.1f,  0.1f,  1.0f, 0.0f,  0.0f, 0.0f, 1.0f,
             0.1f,  0.1f,  0.1f,  1.0f, 1.0f,  0.0f, 0.0f, 1.0f,
             0.1f,  0.1f,  0.1f,  1.0f, 1.0f,  0.0f, 0.0f, 1.0f,
             -0.1f,  0.1f,  0.1f,  0.0f, 1.0f,  0.0f, 0.0f, 1.0f,
             -0.1f, -0.1f,  0.1f,  0.0f, 0.0f,  0.0f, 0.0f, 1.0f,
-
+            //Face 2
             -0.1f,  0.1f,  0.1f,  1.0f, 0.0f,  -1.0f, 0.0f, 0.0f,
             -0.1f,  0.1f, -0.1f,  1.0f, 1.0f,  -1.0f, 0.0f, 0.0f,
             -0.1f, -0.1f, -0.1f,  0.0f, 1.0f,  -1.0f, 0.0f, 0.0f,
             -0.1f, -0.1f, -0.1f,  0.0f, 1.0f,  -1.0f, 0.0f, 0.0f,
             -0.1f, -0.1f,  0.1f,  0.0f, 0.0f,  -1.0f, 0.0f, 0.0f,
             -0.1f,  0.1f,  0.1f,  1.0f, 0.0f,  -1.0f, 0.0f, 0.0f,
-
+            //Face 5
             0.1f,  0.1f,  0.1f,  1.0f, 0.0f,  1.0f, 0.0f, 0.0f,
             0.1f,  0.1f, -0.1f,  1.0f, 1.0f,  1.0f, 0.0f, 0.0f,
             0.1f, -0.1f, -0.1f,  0.0f, 1.0f,  1.0f, 0.0f, 0.0f,
             0.1f, -0.1f, -0.1f,  0.0f, 1.0f,  1.0f, 0.0f, 0.0f,
             0.1f, -0.1f,  0.1f,  0.0f, 0.0f,  1.0f, 0.0f, 0.0f,
             0.1f,  0.1f,  0.1f,  1.0f, 0.0f,  1.0f, 0.0f, 0.0f,
-
+            //Face 6
             -0.1f, -0.1f, -0.1f,  0.0f, 1.0f,  0.0f, -1.0f, 0.0f,
             0.1f, -0.1f, -0.1f,  1.0f, 1.0f,  0.0f, -1.0f, 0.0f,
             0.1f, -0.1f,  0.1f,  1.0f, 0.0f,  0.0f, -1.0f, 0.0f,
             0.1f, -0.1f,  0.1f,  1.0f, 0.0f,  0.0f, -1.0f, 0.0f,
             -0.1f, -0.1f,  0.1f,  0.0f, 0.0f,  0.0f, -1.0f, 0.0f,
             -0.1f, -0.1f, -0.1f,  0.0f, 1.0f,  0.0f, -1.0f, 0.0f,
-
+            //Face 3
             -0.1f,  0.1f, -0.1f,  0.0f, 1.0f,  0.0f, 1.0f, 0.0f,
             0.1f,  0.1f, -0.1f,  1.0f, 1.0f,  0.0f, 1.0f, 0.0f,
             0.1f,  0.1f,  0.1f,  1.0f, 0.0f,  0.0f, 1.0f, 0.0f,
@@ -91,11 +91,11 @@ public:
 	CEntity();
     CEntity(entity_type_enum type, unsigned int id, glm::vec3 position, const char* vsFile, const char* fragFile);
 	CEntity(entity_type_enum type, unsigned int id, glm::vec3 position, const char* vsFile, const char* fragFile, GLfloat* vertices);
-    //Seul constructeur vraiment utilisï¿½ (notamment dans CEngineInterface)
+    //Seul constructeur vraiment utilise (notamment dans CEngineInterface)
     CEntity(entity_type_enum type, unsigned int id, glm::vec3 position, const char* vsFile, const char* fragFile, int texture_number);
     CEntity(entity_type_enum type, unsigned int id, glm::vec3 position, const char* vsFile, const char* fragFile, int texture_number, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float shininess, float transparency);
     CEntity(CEntity* entity); //Constructeur de recopie
-	//A complï¿½ter
+	//A completer
 	~CEntity();
     //Getters & Setters
     unsigned int uiENTGetVerticesSize();

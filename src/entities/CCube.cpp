@@ -2,7 +2,7 @@
 
 /// Constructors & Destructors ///
 CCube::CCube() {
-	enumENTType = entity;
+	enumENTType = cube;
 	uiENTId = 0;
 	strENTName = "##";
 	vec3ENTWorldPosition = glm::vec3(0.0f);

@@ -4,8 +4,6 @@
 class CCube : public CEntity {
 public:
     unsigned int uiCUBId;
-	const char* pcCUBVertexShaderName; //Nom du fichier, par exemple : "core.vert"
-	const char* pcCUBFragmentShaderName;
 	GLfloat* pgfCUBVertices;
 	unsigned int uiCUBVerticesSize;
     GLfloat gfCUBScaleRatio;
@@ -23,7 +21,7 @@ public:
     //Texture
 	unsigned int uiCUBTextureEngineNumber;
     unsigned int uiCUBSpecularTextureEngineNumber;
-    //Les vertices d'un cube de base
+	//Les vertices d'un cube de base
     static const GLfloat* cubeVertices() {
         //Par défaut dans OpenGL les valeurs de l'écran vont de -1 à 1
         static const GLfloat cVer[288] = { //Perspective projection Définition d'un cube
@@ -74,7 +72,8 @@ public:
         };
         return cVer;
     }
-    unsigned int uiCUBGetVerticesSize();
+
+	unsigned int uiCUBGetVerticesSize();
     void CUBNormalVectorCalculation();
     void CUBDisplayNormalVectors();
 
