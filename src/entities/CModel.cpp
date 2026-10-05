@@ -1,5 +1,21 @@
 #include "../../include/entities/CModel.h"
 
+CModel::CModel(std::string const& path, bool gamma) : gammaCorrection(gamma)
+{
+    strMODPath = path;
+    size_t nameStart = path.find_last_of("/\\");
+    strMODName = (nameStart == std::string::npos) ? path : path.substr(nameStart + 1);
+    bMODActive = true;
+    vec3MODPosition = glm::vec3(0.0f);
+    vec3MODRotation = glm::vec3(0.0f);
+    fMODScale = 1.0f;
+    loadModel(path);
+}
+
+bool CModel::bMODIsLoaded() const {
+    return !meshes.empty();
+}
+
 glm::mat4 CModel::mat4MODGetModelMatrix() const {
     glm::mat4 model = glm::translate(glm::mat4(1.0f), vec3MODPosition);
     model = glm::rotate(model, glm::radians(vec3MODRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
