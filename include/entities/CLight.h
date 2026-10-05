@@ -17,9 +17,9 @@ public:
 	GLfloat gfLIGSpecularStrength;
     //Light casters
     glm::vec3 vec3LIGDirection;
-    float fLIGPointKC;
-    float fLIGPointKL;
-    float fLIGPointKQ;
+    float fLIGPointKC; //Constant attenuation factor
+    float fLIGPointKL; //Linear attenuation factor
+    float fLIGPointKQ; //Quadratic attenuation factor
     float fLIGInnerCutOff;
     float fLIGOuterCutOff;
 

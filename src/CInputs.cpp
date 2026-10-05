@@ -4,7 +4,6 @@ CInputs::CInputs() {
     mat4INPMovement = glm::mat4(1.0f);
     strINPKeyBindsPathFile = "../configs/keybinds.txt";
     iINPCameraState = 0;
-    dINPSensitivity = 0.05f;
     bINPFirstMouse = true;
     camINPChosenCamera = CCamera();
     bINPBackspaceInputTextInterface = false; //Au début on ne supprime rien dans un champ texte
@@ -14,7 +13,6 @@ CInputs::CInputs(CCamera& camera) {
     mat4INPMovement = glm::mat4(1.0f);
     strINPKeyBindsPathFile = "../configs/keybinds.txt";
     iINPCameraState = 0;
-    dINPSensitivity = 0.1f;
     camINPChosenCamera = camera;
     bINPFirstMouse = true;
 }
@@ -64,16 +62,16 @@ void CInputs::processInputs(GLFWwindow* window) {
         camINPChosenCamera.vec3CAMCameraPosition += (float)(camINPChosenCamera.fCAMCameraSpeedMovement * dINPDiffTime) * camINPChosenCamera.vec3CAMCameraUp;
     }
     if (glfwGetKey(window, mapStrIntINPKeybinds["ROTATE_VIEW_LEFT"])) { //Essayer avec camINPChosenCamera.mat4CAMView
-        mat4INPMovement = glm::rotate(mat4INPMovement, glm::radians((GLfloat)(-6.f * dINPSensitivity)), glm::vec3(0.0f,1.0f,0.0f));
+        mat4INPMovement = glm::rotate(mat4INPMovement, glm::radians((GLfloat)(-6.f * camINPChosenCamera.fCAMCameraSensitivity)), glm::vec3(0.0f,1.0f,0.0f));
     }
     if (glfwGetKey(window, mapStrIntINPKeybinds["ROTATE_VIEW_RIGHT"])) {
-        mat4INPMovement = glm::rotate(mat4INPMovement, glm::radians((GLfloat)(6.f * dINPSensitivity)), glm::vec3(0.0f, 1.0f, 0.0f));
+        mat4INPMovement = glm::rotate(mat4INPMovement, glm::radians((GLfloat)(6.f * camINPChosenCamera.fCAMCameraSensitivity)), glm::vec3(0.0f, 1.0f, 0.0f));
     }
     if (glfwGetKey(window, mapStrIntINPKeybinds["ROTATE_VIEW_UP"])) {
-        mat4INPMovement = glm::rotate(mat4INPMovement, glm::radians((GLfloat)(6.f * dINPSensitivity)), glm::vec3(1.0f, 0.0f, 0.0f));
+        mat4INPMovement = glm::rotate(mat4INPMovement, glm::radians((GLfloat)(6.f * camINPChosenCamera.fCAMCameraSensitivity)), glm::vec3(1.0f, 0.0f, 0.0f));
     }
     if (glfwGetKey(window, mapStrIntINPKeybinds["ROTATE_VIEW_DOWN"])) {
-        mat4INPMovement = glm::rotate(mat4INPMovement, glm::radians((GLfloat)(-6.f * dINPSensitivity)), glm::vec3(1.0f, 0.0f, 0.0f));
+        mat4INPMovement = glm::rotate(mat4INPMovement, glm::radians((GLfloat)(-6.f * camINPChosenCamera.fCAMCameraSensitivity)), glm::vec3(1.0f, 0.0f, 0.0f));
     }
 }
 
@@ -112,8 +110,8 @@ void CInputs::INPMouseCallback(GLFWwindow* window, double xpos, double ypos) {
         dINPLastMouseX = xpos;
         dINPLastMouseY = ypos;
 
-        xoffset *= dINPSensitivity;
-        yoffset *= dINPSensitivity;
+        xoffset *= camINPChosenCamera.fCAMCameraSensitivity;
+        yoffset *= camINPChosenCamera.fCAMCameraSensitivity;
 
         camINPChosenCamera.fCAMYaw += (GLfloat)xoffset;
         camINPChosenCamera.fCAMPitch += (GLfloat)yoffset;

@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 3.20)
 
 # vcpkg config
-set(CMAKE_TOOLCHAIN_FILE "C:/Users/antoi/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
-set(VCPKG_TARGET_TRIPLET x64-mingw-dynamic CACHE STRING "")
+if(DEFINED ENV{VCPKG_ROOT} AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+    set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
+endif()
+set(VCPKG_TARGET_TRIPLET x64-mingw-static CACHE STRING "")
 
 project(OrchidEngine VERSION 1.0.0 LANGUAGES CXX)
 
@@ -56,5 +58,14 @@ target_link_libraries(Orchid PRIVATE
         glm::glm
         assimp::assimp
 )
+
+if(MINGW)
+    # Bundled MinGW's libwinpthread.a needs __intrinsic_setjmpex, which only
+    # exists in libucrt.a (the default link spec pulls in libmsvcrt instead).
+    # Must be appended after the implicit -lwinpthread the compiler adds, so
+    # it goes on CMAKE_CXX_STANDARD_LIBRARIES (linked last) rather than via
+    # target_link_libraries (linked before the implicit libs).
+    string(APPEND CMAKE_CXX_STANDARD_LIBRARIES " -lucrt")
+endif()
 
 target_compile_definitions(Orchid PRIVATE)

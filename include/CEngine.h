@@ -1,29 +1,14 @@
 #pragma once
 #include <string>
-
-//IMGUI Docking branch V1.90
-
-/*
-#include "../EXTERNAL/IMGUI/imstb_textedit.h"
-#include "../EXTERNAL/IMGUI/imstb_rectpack.h"
-#include "../EXTERNAL/IMGUI/imstb_truetype.h"*/ //Fonctionne pas car STB manque et n'est pas bien intégré dans le header
-
-//IMPLOT
-
-//#define STB_IMAGE_IMPLEMENTATION
-//#include <stb_image.h>
-
-//#define GLEW_STATIC //car on lie via gl32s.lib
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-
-//#include "ShlObj_core.h"
-
 #include "entities/CEntity.h"
 #include "CShader.h"
 #include "CInputs.h"
 #include "entities/CCube.h"
 #include "entities/CLight.h"
+#include "entities/CModel.h"
+#include <vector>
 
 #define TYPES_OF_ENTITIES 8 //2 : directional, 3 : point, 4 : spot
 
@@ -32,22 +17,13 @@ class CTexture;
 class CEngine {
 public:
 	int iENGFpsLimiter;
-	//Post-processing
-	GLfloat gfENGBrightness;
-	GLfloat gfENGContrast;
-	GLfloat gfENGSaturation;
-	GLfloat gfENGGamma;
-	bool bENGNormeRec_709;
-	bool bENGHasFocus;
 
 	//Render pipeline
 	//Il faudra charger "../../../Assets/nom_texture.extension" Dans pstrENGTexturesPath seul nom_texture.extension sera stocké
 	std::string strENGAssetsTexturesFolder;
 	int iENGMaxNumberOfTextures;//Valeur déprécié dans la dernière version
 	std::string* pstrENGTexturesPath; //Est-ce qu'il faudrait pas mieux stocker les GLuint qui sont bind avec GlBindTexture(GL_TEXTURE_2D, texture) où texture est un GLuint
-	//CRender* prdrENGRenderPipeline;
 
-//public: //Modifier et mettre en privée ce qui est nécessaire
 	GLFWwindow* pwindowENGWindow;
 	GLFWmonitor* pmonitorENGMonitor;
 	GLuint uiENGWidth, uiENGHeight;
@@ -76,6 +52,7 @@ public:
 	CEntity** ppentENGAllEntitiesList;
 	CCube* pcubENGCubeEntitiesList; //A utiliser comme pour ptexENGAllTextures, un CEntity* peut etre mieux qu'un CEntity**
 	CLight* pligENGLightEntitiesList;
+	std::vector<CModel> modENGModels; //3D models loaded with assimp
 
 	//Lights
 	int iENGNumberDirectionalLights; int iENGNumberActiveDirectionalLights;
@@ -102,7 +79,6 @@ public:
 	//Render
 	CShader shaENGCoreShader;
 	CShader shaENGLightShader;
-	CShader shaENGPostProcessShader;
 
 	int iENGMaxNumberVAO;
 	int iENGMaxNumberVBO;
@@ -131,16 +107,6 @@ public:
 	void ENGIncrementNextFreeEntityID(int type_of_entity, int value_of_inc);
 	unsigned int uiENGGetNextFreeEntityID(int type_of_entity);
 	unsigned int uiENGGetNextFreeGlobalID();
-	void ENGSetBrightness(GLfloat brightness);
-	GLfloat gfENGGetBrightness();
-	void ENGSetContrast(GLfloat contrast);
-	GLfloat gfENGGetContrast();
-	void ENGSetSaturation(GLfloat saturation);
-	GLfloat gfENGGetSaturation();
-	void ENGSetGamma(GLfloat gamma);
-	GLfloat gfENGGetGamma();
-	void ENGSetNormRec(bool checked);
-	bool bENGGetNormRec();
 	void ENGSetAssetsTexturesFolder(std::string path);
 	std::string strENGGetAssetsTexturesFolder();
 	
@@ -154,17 +120,15 @@ public:
 	//void ENGRender();
 
 	void ENGChangeResolution(GLuint width, GLuint height);
-	void ENGPostProcess();
 	void ENGFpsCounterAndLimiter();
 
 	//Entity related
-	void ENGAddCubeEntity(CCube cube);
-	void ENGAddLightEntity(CLight light);
-	void ENGRemoveCubeEntity(CCube &cube);
+	void ENGAddCubeEntity(CCube &cube);
+	void ENGAddLightEntity(CLight &light);
+	bool ENGAddModel(const std::string& path); //Returns false if the model could not be loaded
 	//unsigned int* puiENGEntitiesIdInTheLODArea();
 
 	//Textures related
-	//void ENGAddTextureToAllTexturesList(CTexture& texture);
 	void ENGAddTextureToAllTexturesList(CTexture texture);
 
 	//Inputs related
@@ -183,7 +147,6 @@ public:
 	int iTEXNumeroChannels;
 	bool bTEXTransparent;
 	std::string strTEXType; //specular ou diffuse
-//public:
 	std::string strTEXImagePath;
 	CTexture();
 	CTexture(std::string path, bool transparent);
@@ -191,8 +154,6 @@ public:
 
 	void TEXSetNumeroTexture(GLuint nr_tex);
 	GLuint guiTEXGetNumeroTexture();
-	//void TEXSetImage(unsigned char* image);
-	//unsigned char* pucTEXGetImage();
 	void TEXSetTextureWidth(int width);
 	int iTEXGetTextureWidth();
 	void TEXSetTextureHeight(int height);

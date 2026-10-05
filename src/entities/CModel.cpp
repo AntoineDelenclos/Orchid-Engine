@@ -1,15 +1,49 @@
 #include "../../include/entities/CModel.h"
 
+CModel::CModel(std::string const& path, bool gamma) : gammaCorrection(gamma)
+{
+    strMODPath = path;
+    size_t nameStart = path.find_last_of("/\\");
+    strMODName = (nameStart == std::string::npos) ? path : path.substr(nameStart + 1);
+    bMODActive = true;
+    vec3MODPosition = glm::vec3(0.0f);
+    vec3MODRotation = glm::vec3(0.0f);
+    fMODScale = 1.0f;
+    loadModel(path);
+}
+
+bool CModel::bMODIsLoaded() const {
+    return !meshes.empty();
+}
+
+glm::mat4 CModel::mat4MODGetModelMatrix() const {
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), vec3MODPosition);
+    model = glm::rotate(model, glm::radians(vec3MODRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(vec3MODRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(vec3MODRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+    return glm::scale(model, glm::vec3(fMODScale));
+}
+
+//The shader must already be in use. The "model" uniform is shared with the other entities so we restore it after drawing.
 void CModel::Draw(CShader& shader) {
+    GLint modelLoc = glGetUniformLocation(shader.Program, "model");
+    glm::mat4 previousModel(1.0f);
+    glGetUniformfv(shader.Program, modelLoc, glm::value_ptr(previousModel));
+    glm::mat4 model = mat4MODGetModelMatrix();
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+    shader.SHASetMaterial(vec3MODAmbient, fMODShininess, fMODTransparency);
     for (unsigned int i = 0; i < meshes.size(); i++)
         meshes[i].Draw(shader);
+
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(previousModel));
 }
 
 void CModel::loadModel(std::string path)
 {
     // read file via ASSIMP
     Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace); // FlipUVs annule le "1.0 - y" de core.vert : l'atlas du sac s'attend à V non inversé
     // check for errors
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
     {
@@ -17,7 +51,7 @@ void CModel::loadModel(std::string path)
         return;
     }
     // retrieve the directory path of the filepath
-    directory = path.substr(0, path.find_last_of('/'));
+    directory = path.substr(0, path.find_last_of("/\\"));
 
     // process ASSIMP's root node recursively
     processNode(scene->mRootNode, scene);
@@ -138,25 +172,15 @@ CMesh CModel::processMesh(aiMesh* mesh, const aiScene* scene)
     }
     // process materials
     aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-    // we assume a convention for sampler names in the shaders. Each diffuse texture should be named
-    // as 'texture_diffuseN' where N is a sequential number ranging from 1 to MAX_SAMPLER_NUMBER. 
-    // Same applies to other texture as the following list summarizes:
-    // diffuse: texture_diffuseN
-    // specular: texture_specularN
-    // normal: texture_normalN
+    // Le type de chaque texture est directement le nom de l'uniform sampler dans core.frag
+    // (CMesh::Draw lie la texture i à l'unité i sous ce nom).
 
     // 1. diffuse maps
-    std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+    std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "material.diffuseTexture");
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
     // 2. specular maps
-    std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+    std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "material.specularTexture");
     textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-    // 3. normal maps
-    std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
-    textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
-    // 4. height maps
-    std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
-    textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
     // return a mesh object created from the extracted mesh data
     return CMesh(vertices, indices, textures);

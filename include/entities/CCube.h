@@ -4,11 +4,10 @@
 class CCube : public CEntity {
 public:
     unsigned int uiCUBId;
-	const char* pcCUBVertexShaderName; //Nom du fichier, par exemple : "core.vert"
-	const char* pcCUBFragmentShaderName;
 	GLfloat* pgfCUBVertices;
 	unsigned int uiCUBVerticesSize;
     GLfloat gfCUBScaleRatio;
+    glm::vec3 vec3CUBRotation; //Euler angles in degrees (applied in X, Y, Z order, around the cube center)
     
     GLfloat gfCUBLength;
     GLfloat gfCUBHeight;
@@ -23,7 +22,7 @@ public:
     //Texture
 	unsigned int uiCUBTextureEngineNumber;
     unsigned int uiCUBSpecularTextureEngineNumber;
-    //Les vertices d'un cube de base
+	//Les vertices d'un cube de base
     static const GLfloat* cubeVertices() {
         //Par défaut dans OpenGL les valeurs de l'écran vont de -1 à 1
         static const GLfloat cVer[288] = { //Perspective projection Définition d'un cube
@@ -74,7 +73,8 @@ public:
         };
         return cVer;
     }
-    unsigned int uiCUBGetVerticesSize();
+
+	unsigned int uiCUBGetVerticesSize();
     void CUBNormalVectorCalculation();
     void CUBDisplayNormalVectors();
 
@@ -87,6 +87,8 @@ public:
 
     void CUBChangeWorldPosition(glm::vec3 new_position);
     void CUBScaleEntitySize(GLfloat ratio);
+    void CUBChangeRotation(glm::vec3 new_rotation);
+    void CUBRebuildSummit(int summit); //Rebuild one summit from the base cube (scale, rotation and position)
 
     void CUBChangeHeight(GLfloat height);
     void CUBChangeLength(GLfloat length);
