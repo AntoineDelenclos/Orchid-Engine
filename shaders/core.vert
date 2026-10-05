@@ -18,6 +18,6 @@ uniform mat4 movement;
 void main() {
 	gl_Position = projection * view * movement * model * vec4(position,1.0);
 	TexCoord = vec2(texCoord.x, 1.0 - texCoord.y);
-	Normal = normal;
+	Normal = mat3(transpose(inverse(model))) * normal; //Follows the model rotation/scale (identity for cubes)
 	crntPos = vec3(model * vec4(position, 1.0)); //Permet d'avoir la position du Frag et donc relative aux coordonnées du monde
 }

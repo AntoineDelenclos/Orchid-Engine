@@ -7,6 +7,7 @@ public:
 	GLfloat* pgfCUBVertices;
 	unsigned int uiCUBVerticesSize;
     GLfloat gfCUBScaleRatio;
+    glm::vec3 vec3CUBRotation; //Euler angles in degrees (applied in X, Y, Z order, around the cube center)
     
     GLfloat gfCUBLength;
     GLfloat gfCUBHeight;
@@ -86,6 +87,8 @@ public:
 
     void CUBChangeWorldPosition(glm::vec3 new_position);
     void CUBScaleEntitySize(GLfloat ratio);
+    void CUBChangeRotation(glm::vec3 new_rotation);
+    void CUBRebuildSummit(int summit); //Rebuild one summit from the base cube (scale, rotation and position)
 
     void CUBChangeHeight(GLfloat height);
     void CUBChangeLength(GLfloat length);

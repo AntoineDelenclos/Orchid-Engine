@@ -37,6 +37,10 @@ public:
 	float fEGINewEntityShininess;
 	float fEGINewEntityTransparency;
 
+	//3D models interface
+	int siEGISelectedModel;
+	char pcEGINewModelPath[260];
+
 	//Select entity in the lists
 	int siEGISelectedEntity_cube;
 	int siEGISelectedEntity_dir_light;
@@ -66,18 +70,9 @@ public:
 	CEngineInterface(CEngine &engine);
 	~CEngineInterface();
 
-	//IMGUI MODULES
-	void EGIEngineModule(CEngine& engine);
-	void EGITexturesModule(CEngine& engine);
-	void EGIEntitiesListsModule(CEngine &engine);
-	void EGINewEntityModule(CEngine& engine);
-	void EGISelectedEntityModule(CEngine& engine);
-	void EGIDockingEngine(CEngine& engine);
 
 
 	void EGIFramebufferModule(CEngine& engine, GLuint texture);
-	void EGIMenuBar(CEngine& engine);
-	std::string strEGIOpenFileDialog(char* filter, HWND owner);
 
 	void EGIWireframeUpdate();
 	void EGIFullscreenUpdate(CEngine &engine);

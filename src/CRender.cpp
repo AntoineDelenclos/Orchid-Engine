@@ -147,3 +147,12 @@ void CRender::RDRRenderingLightCubes(CEngine& engine) {
 		}
 	}
 }
+
+void CRender::RDRRenderingModels(CEngine& engine) {
+	engine.shaENGCoreShader.SHAUse();
+	for (size_t boucle_model = 0; boucle_model < engine.modENGModels.size(); boucle_model++) {
+		if (engine.modENGModels[boucle_model].bMODActive) {
+			engine.modENGModels[boucle_model].Draw(engine.shaENGCoreShader);
+		}
+	}
+}

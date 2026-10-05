@@ -1,6 +1,5 @@
+#define STB_IMAGE_IMPLEMENTATION //Must be defined before the first include of stb_image.h (CModel.h includes it through CEngine.h)
 #include "../include/CEngine.h"
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb-master/stb_image.h>
 
 #include "imgui.h"
 #include "imgui_impl_opengl3.h"
@@ -416,6 +415,15 @@ void CEngine::ENGAddLightEntity(CLight &light) {
 		mapStrIntENGNumberOfEachEntities["spot_light"] += 1;
 		break;
 	}
+}
+
+bool CEngine::ENGAddModel(const std::string& path) {
+	CModel model = CModel(path);
+	if (!model.bMODIsLoaded()) {
+		return false;
+	}
+	modENGModels.push_back(model);
+	return true;
 }
 
 //Function to pass to the callback functions in inputs the values needed

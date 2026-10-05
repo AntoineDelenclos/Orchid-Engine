@@ -1,9 +1,42 @@
 #include "../../include/entities/CModel.h"
 
+CModel::CModel(std::string const& path, bool gamma) : gammaCorrection(gamma)
+{
+    strMODPath = path;
+    size_t nameStart = path.find_last_of("/\\");
+    strMODName = (nameStart == std::string::npos) ? path : path.substr(nameStart + 1);
+    bMODActive = true;
+    vec3MODPosition = glm::vec3(0.0f);
+    vec3MODRotation = glm::vec3(0.0f);
+    fMODScale = 1.0f;
+    loadModel(path);
+}
+
+bool CModel::bMODIsLoaded() const {
+    return !meshes.empty();
+}
+
+glm::mat4 CModel::mat4MODGetModelMatrix() const {
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), vec3MODPosition);
+    model = glm::rotate(model, glm::radians(vec3MODRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(vec3MODRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(vec3MODRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+    return glm::scale(model, glm::vec3(fMODScale));
+}
+
+//The shader must already be in use. The "model" uniform is shared with the other entities so we restore it after drawing.
 void CModel::Draw(CShader& shader) {
+    GLint modelLoc = glGetUniformLocation(shader.Program, "model");
+    glm::mat4 previousModel(1.0f);
+    glGetUniformfv(shader.Program, modelLoc, glm::value_ptr(previousModel));
+    glm::mat4 model = mat4MODGetModelMatrix();
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
     shader.SHASetMaterial(vec3MODAmbient, fMODShininess, fMODTransparency);
     for (unsigned int i = 0; i < meshes.size(); i++)
         meshes[i].Draw(shader);
+
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(previousModel));
 }
 
 void CModel::loadModel(std::string path)
